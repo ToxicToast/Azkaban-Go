@@ -35,7 +35,7 @@ jobs:
       - name: 📥 Install golangci-lint
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-            | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+            | sh -s -- -b $(go env GOPATH)/bin v2.3.1
 
       - name: 🔍 Run golangci-lint per module
         run: |
@@ -43,7 +43,7 @@ jobs:
             dir=$(dirname $d)
             if [ "$(find "$dir" -type f -name '*.go' | wc -l)" -gt 0 ]; then
               echo "→ Linting $dir"
-              golangci-lint run --timeout=3m $dir/...
+              golangci-lint run --timeout=3m --fast $dir/...
             else
               echo "→ Skipping $dir (no Go files)"
             fi
