@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package foodfolio.location;
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/foodfolio/location;location";
