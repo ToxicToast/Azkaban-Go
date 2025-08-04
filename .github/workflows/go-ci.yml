@@ -43,7 +43,7 @@ jobs:
             dir=$(dirname $d)
             if [ "$(find "$dir" -type f -name '*.go' | wc -l)" -gt 0 ]; then
               echo "→ Linting $dir"
-              golangci-lint run --timeout=3m --fast $dir/...
+              golangci-lint run --timeout=3m $dir/...
             else
               echo "→ Skipping $dir (no Go files)"
             fi
