@@ -1,0 +1,89 @@
+name: Go CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  golang-ci:
+    name: Golang CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧰 Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.4'
+
+      - name: 📦 Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+
+      - name: 📜 Sync go.work
+        run: go work sync
+
+      - name: 📥 Install golangci-lint
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
+            | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+
+      - name: 🔍 Run golangci-lint per module
+        run: |
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            if [ "$(find "$dir" -type f -name '*.go' | wc -l)" -gt 0 ]; then
+              echo "→ Linting $dir"
+              golangci-lint run --timeout=3m $dir/...
+            else
+              echo "→ Skipping $dir (no Go files)"
+            fi
+          done
+
+      - name: 🔨 Build all modules
+        run: |
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            echo "→ Building $dir"
+            go build -v $dir/...
+          done
+
+      - name: ✅ Run all tests
+        run: |
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            if [ "$(find "$dir" -type f -name '*_test.go' | wc -l)" -gt 0 ]; then
+              echo "→ Testing $dir"
+              go test -v $dir/...
+            else
+              echo "→ Skipping $dir (no tests)"
+            fi
+          done
+
+      - name: 📊 Collect coverage
+        run: |
+          echo "mode: atomic" > coverage.out
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            go test -covermode=atomic -coverprofile=profile.out $dir/...
+            if [ -f profile.out ]; then
+              tail -n +2 profile.out >> coverage.out
+              rm profile.out
+            fi
+          done
+        continue-on-error: true
+
+      - name: 📤 Upload coverage report (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.out
