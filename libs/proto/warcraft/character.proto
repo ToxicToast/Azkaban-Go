@@ -65,11 +65,15 @@ message GetCharacterByCharacterIdRequest {
 message GetCharacterByUserIdRequest {
     google.protobuf.Int64Value user_id = 1;
     optional bool with_deleted = 2;
+    optional int64 limit = 3;
+    optional int64 offset = 4;
 }
 
 message GetCharacterByGuildRequest {
     optional string guild = 1;
     optional bool with_deleted = 2;
+    optional int64 limit = 3;
+    optional int64 offset = 4;
 }
 
 //
