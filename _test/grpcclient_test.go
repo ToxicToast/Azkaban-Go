@@ -9,6 +9,7 @@ import (
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/grpcclient"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/test/bufconn"
 )
 
@@ -41,7 +42,7 @@ func TestClient_GetConn(t *testing.T) {
 
 	factory := grpcclient.NewClient(
 		grpc.WithContextDialer(dialer(listener)),
-		grpc.WithInsecure(), // nur für Tests
+		grpc.WithTransportCredentials(insecure.NewCredentials()), // only for tests
 		grpc.WithBlock(),
 		grpc.WithTimeout(2*time.Second),
 	)

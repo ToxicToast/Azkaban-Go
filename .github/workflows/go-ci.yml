@@ -52,16 +52,7 @@ jobs:
           done
 
       - name: ✅ Run all tests
-        run: |
-          for d in $(find apps libs -name go.mod); do
-            dir=$(dirname $d)
-            if [ "$(find "$dir" -type f -name '*_test.go' | wc -l)" -gt 0 ]; then
-              echo "→ Testing $dir"
-              go test -v $dir/...
-            else
-              echo "→ Skipping $dir (no tests)"
-            fi
-          done
+        run: mage test
 
       - name: 📊 Collect coverage
         run: |
