@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package warcraft;
 
-option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/warcraft;warcraft";
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
 
 import "google/protobuf/wrappers.proto";
 

@@ -1,5 +1,5 @@
 syntax = "proto3";
 
-package foodfolio.types;
+package foodfolio;
 
-option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/foodfolio/types;types";
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/foodfolio;types";
