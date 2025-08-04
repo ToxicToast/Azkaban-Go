@@ -21,6 +21,9 @@ var (
 		"foodfolio/size.proto",
 		"foodfolio/type.proto",
 		"foodfolio/warehouse.proto",
+		//
+		"warcraft/character.proto",
+		"warcraft/guild.proto",
 	}
 )
 
