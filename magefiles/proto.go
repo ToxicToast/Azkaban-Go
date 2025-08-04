@@ -24,6 +24,8 @@ var (
 		//
 		"warcraft/character.proto",
 		"warcraft/guild.proto",
+		//
+		"twitch/viewer.proto",
 	}
 )
 
