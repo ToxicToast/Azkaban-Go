@@ -1,19 +1,27 @@
 version: "2"
 
 run:
+  timeout: 5m
   skip-files:
     - ".*_test.go"
+    - ".*\\.pb\\.go"
+  skip-dirs:
+    - "libs/shared/proto"     # optional, falls du dort nur generated Files hast
 
 linters:
   enable:
     - gocyclo
     - revive
+    - staticcheck
+    - govet
+
   exclusions:
     generated: lax
     paths:
       - third_party$
       - builtin$
       - examples$
+
 formatters:
   exclusions:
     generated: lax
@@ -27,13 +35,21 @@ linters-settings:
     exclude-rules:
       - path: _test\.go
         text: "exported"
+      - path: \.pb\.go
+        text: "exported"
+
   staticcheck:
     exclude-rules:
       - path: _test\.go
         text: "SA2002"
       - path: _test\.go
         text: "SA1019"
+      - path: \.pb\.go
+        text: "SA1019"
+
   govet:
     exclude-rules:
       - path: _test\.go
         text: "testinggoroutine"
+      - path: \.pb\.go
+        text: "internal error"
