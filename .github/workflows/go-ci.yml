@@ -41,8 +41,12 @@ jobs:
         run: |
           for d in $(find apps libs -name go.mod); do
             dir=$(dirname $d)
-            echo "→ Linting $dir"
-            golangci-lint run --timeout=3m $dir/...
+            if [ "$(find "$dir" -type f -name '*.go' | wc -l)" -gt 0 ]; then
+              echo "→ Linting $dir"
+              golangci-lint run --timeout=3m $dir/...
+            else
+              echo "→ Skipping $dir (no Go files)"
+            fi
           done
 
       - name: 🔨 Build all modules
@@ -57,11 +61,15 @@ jobs:
         run: |
           for d in $(find apps libs -name go.mod); do
             dir=$(dirname $d)
-            echo "→ Testing $dir"
-            go test -v $dir/...
+            if [ "$(find "$dir" -type f -name '*_test.go' | wc -l)" -gt 0 ]; then
+              echo "→ Testing $dir"
+              go test -v $dir/...
+            else
+              echo "→ Skipping $dir (no tests)"
+            fi
           done
 
-      - name: 📊 Collect coverage (optional)
+      - name: 📊 Collect coverage
         run: |
           echo "mode: atomic" > coverage.out
           for d in $(find apps libs -name go.mod); do
