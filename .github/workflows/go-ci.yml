@@ -43,6 +43,9 @@ jobs:
       - name: 🔍 Run Linter via Mage
         run: mage lint
 
+      - name: 🧪 Run protobuf via Mage
+        run: mage protobuf
+
       - name: 🔨 Build all modules
         run: |
           for d in $(find apps libs -name go.mod); do
