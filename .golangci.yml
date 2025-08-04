@@ -1,4 +1,9 @@
 version: "2"
+
+run:
+  skip-files:
+    - ".*_test.go"
+
 linters:
   enable:
     - gocyclo
