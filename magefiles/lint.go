@@ -40,7 +40,7 @@ func LintFolders() error {
 			}
 			if !info.IsDir() && filepath.Ext(path) == ".go" {
 				hasGoFiles = true
-				return filepath.SkipDir // frühzeitig abbrechen
+				return filepath.SkipDir // abort early
 			}
 			return nil
 		})
