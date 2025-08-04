@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package warcraft;
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
+
+import "google/protobuf/wrappers.proto";
+
+
+message Character {
+    int64 id = 1;
+    string character_id = 2;
+    optional string user_id = 3;
+    string region = 4;
+    string realm = 5;
+    string name = 6;
+    optional string display_realm = 7;
+    optional string display_name = 8;
+    optional string gender = 9;
+    optional string faction = 10;
+    optional string race = 11;
+    optional string class = 12;
+    optional string spec = 13;
+    int64 level = 14;
+    int64 item_level = 15;
+    optional string guild = 16;
+    optional int64 rank = 17;
+    optional string old_guild = 18;
+    optional string inset = 19;
+    optional string avatar = 20;
+    int64 mythic = 21;
+    optional string raid = 22;
+    optional string loggedin_at = 23;
+    optional string activated_at = 24;
+    string created_at = 25;
+    optional string updated_at = 26;
+    optional string deleted_at = 27;
+}
+
+//
+
+message GetCharactersRequest {
+    optional int64 limit = 1;
+    optional int64 offset = 2;
+    optional bool with_deleted = 3;
+}
+
+message GetCharactersResponse {
+    repeated Character data = 1;
+    int64 total = 2;
+}
+
+//
+
+message GetCharacterByIdRequest {
+    int64 id = 1;
+    optional bool with_deleted = 2;
+}
+
+message GetCharacterByCharacterIdRequest {
+    string character_id = 1;
+    optional bool with_deleted = 2;
+}
+
+message GetCharacterByUserIdRequest {
+    google.protobuf.Int64Value user_id = 1;
+    optional bool with_deleted = 2;
+}
+
+message GetCharacterByGuildRequest {
+    optional string guild = 1;
+    optional bool with_deleted = 2;
+}
+
+//
+
+message CreateCharacterRequest {
+    string region = 1;
+    string realm = 2;
+    string name = 3;
+}
+
+//
+
+message UpdateCharacterRequest {
+    int64 id = 1;
+    optional string display_realm = 2;
+    optional string display_name = 3;
+    optional string gender = 4;
+    optional string faction = 5;
+    optional string race = 6;
+    optional string class = 7;
+    optional string spec = 8;
+    google.protobuf.Int64Value level = 9;
+    google.protobuf.Int64Value item_level = 10;
+    optional string loggedin_at = 11;
+}
+
+message UpdateCharacterGuildRequest {
+    int64 id = 1;
+    optional string guild = 2;
+    google.protobuf.Int64Value rank = 3;
+    optional string old_guild = 4;
+}
+
+message UpdateCharacterMythicRequest {
+    int64 id = 1;
+    google.protobuf.Int64Value mythic = 2;
+}
+
+message UpdateCharacterRaidRequest {
+    int64 id = 1;
+    optional string raid = 2;
+}
+
+message UpdateCharacterMediaRequest {
+    int64 id = 1;
+    optional string inset = 2;
+    optional string avatar = 3;
+}
+
+message AssignCharacterRequest {
+    int64 id = 1;
+    google.protobuf.Int64Value user_id = 2;
+}
+
+//
+
+service WarcraftCharacterService {
+    rpc GetCharacters (GetCharactersRequest) returns (GetCharactersResponse);
+    rpc GetCharactersById (GetCharacterByIdRequest) returns (Character);
+    rpc GetCharactersByCharacterId (GetCharacterByCharacterIdRequest) returns (Character);
+    rpc GetCharactersByUserId (GetCharacterByUserIdRequest) returns (GetCharactersResponse);
+    rpc GetCharactersByGuild (GetCharacterByGuildRequest) returns (GetCharactersResponse);
+    rpc CreateCharacter (CreateCharacterRequest) returns (Character);
+    rpc UpdateCharacter (UpdateCharacterRequest) returns (Character);
+    rpc UpdateCharacterGuild (UpdateCharacterGuildRequest) returns (Character);
+    rpc UpdateCharacterMythic (UpdateCharacterMythicRequest) returns (Character);
+    rpc UpdateCharacterRaid (UpdateCharacterRaidRequest) returns (Character);
+    rpc UpdateCharacterMedia (UpdateCharacterMediaRequest) returns (Character);
+    rpc AssignCharacter (AssignCharacterRequest) returns (Character);
+}
