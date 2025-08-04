@@ -32,11 +32,18 @@ jobs:
       - name: 📜 Sync go.work
         run: go work sync
 
-      - name: 🔍 Lint (golangci-lint)
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          args: --timeout=3m
+      - name: 📥 Install golangci-lint
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
+            | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+
+      - name: 🔍 Run golangci-lint per module
+        run: |
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            echo "→ Linting $dir"
+            golangci-lint run --timeout=3m $dir/...
+          done
 
       - name: 🔨 Build all modules
         run: |
@@ -54,9 +61,17 @@ jobs:
             go test -v $dir/...
           done
 
-      - name: 📊 Collect Coverage (optional)
+      - name: 📊 Collect coverage (optional)
         run: |
-          go test -coverprofile=coverage.out ./...
+          echo "mode: atomic" > coverage.out
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            go test -covermode=atomic -coverprofile=profile.out $dir/...
+            if [ -f profile.out ]; then
+              tail -n +2 profile.out >> coverage.out
+              rm profile.out
+            fi
+          done
         continue-on-error: true
 
       - name: 📤 Upload coverage report (optional)
