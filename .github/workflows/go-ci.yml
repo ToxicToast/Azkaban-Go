@@ -1,0 +1,66 @@
+name: Go CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  golang-ci:
+    name: Golang CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧰 Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: 📦 Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+
+      - name: 📜 Sync go.work
+        run: go work sync
+
+      - name: 🔍 Lint (golangci-lint)
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+          args: --timeout=3m
+
+      - name: 🔨 Build all modules
+        run: |
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            echo "→ Building $dir"
+            go build -v $dir/...
+          done
+
+      - name: ✅ Run all tests
+        run: |
+          for d in $(find apps libs -name go.mod); do
+            dir=$(dirname $d)
+            echo "→ Testing $dir"
+            go test -v $dir/...
+          done
+
+      - name: 📊 Collect Coverage (optional)
+        run: |
+          go test -coverprofile=coverage.out ./...
+        continue-on-error: true
+
+      - name: 📤 Upload coverage report (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.out
