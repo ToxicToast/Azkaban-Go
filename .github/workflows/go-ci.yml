@@ -40,11 +40,11 @@ jobs:
       - name: 📜 Sync go.work
         run: go work sync
 
-      - name: 🔍 Run Linter via Mage
-        run: mage lint
-
       - name: 🧪 Run protobuf via Mage
         run: mage protobuf
+
+      - name: 🔍 Run Linter via Mage
+        run: mage lint
 
       - name: 🔨 Build all modules
         run: |
