@@ -3,12 +3,14 @@ package grpcclient
 
 import (
 	"fmt"
+	"sync"
 
 	"google.golang.org/grpc"
 )
 
 // Client is a reusable gRPC client that manages connections to gRPC servers.
 type Client struct {
+	mu          sync.RWMutex
 	connections map[string]*grpc.ClientConn
 	dialOps     []grpc.DialOption
 }
@@ -23,14 +25,25 @@ func NewClient(dialOps ...grpc.DialOption) *Client {
 
 // GetConnection returns a cached or newly established gRPC connection for the given address.
 func (c *Client) GetConnection(addr string) (*grpc.ClientConn, error) {
-	if conn, ok := c.connections[addr]; ok {
+	c.mu.RLock()
+	conn, ok := c.connections[addr]
+	c.mu.RUnlock()
+
+	if ok {
 		return conn, nil
 	}
 
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if conn, ok := c.connections[addr]; ok {
+		return conn, nil
+	}
 	conn, err := grpc.NewClient(addr, c.dialOps...)
 	if err != nil {
-		return nil, fmt.Errorf("failed to dial gRPC Server %s: %w", addr, err)
+		return nil, fmt.Errorf("failed to dial gRPC server %s: %w", addr, err)
 	}
+
 	c.connections[addr] = conn
 	return conn, nil
 }
