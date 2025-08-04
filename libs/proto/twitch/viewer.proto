@@ -2,4 +2,4 @@ syntax = "proto3";
 
 package twitch;
 
-option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/twitch/twitch;twitch";
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/twitch;twitch";
