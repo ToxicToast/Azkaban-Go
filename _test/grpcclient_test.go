@@ -1,4 +1,4 @@
-package grpcclient_test
+package _test
 
 import (
 	"context"

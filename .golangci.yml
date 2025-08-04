@@ -21,3 +21,19 @@ formatters:
       - third_party$
       - builtin$
       - examples$
+
+linters-settings:
+  revive:
+    exclude-rules:
+      - path: _test\.go
+        text: "exported"
+  staticcheck:
+    exclude-rules:
+      - path: _test\.go
+        text: "SA2002"
+      - path: _test\.go
+        text: "SA1019"
+  govet:
+    exclude-rules:
+      - path: _test\.go
+        text: "testinggoroutine"

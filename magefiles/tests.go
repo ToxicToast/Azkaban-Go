@@ -12,7 +12,10 @@ import (
 func Test() error {
 	fmt.Println("✅ Running all tests...")
 
-	cmd := exec.Command("go", "test", "-v", "./libs/shared/grpcclient")
+	cmd := exec.Command("go", "test", "-v", "./_test")
+
+	fmt.Printf("→ %s\n", cmd)
+
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
