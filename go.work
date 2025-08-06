@@ -5,6 +5,8 @@ use (
 	./apps/foodfolio
 	./apps/gateway
 	./apps/warcraft
+	./apps/blog
+	./apps/cronjob
 	./libs/auth
 	./libs/events
 	./libs/proto
