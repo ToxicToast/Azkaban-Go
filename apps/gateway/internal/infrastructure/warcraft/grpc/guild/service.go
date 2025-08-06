@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/ToxicToast/Azkaban-Go/apps/gateway/internal/application/warcraft/port"
-	sharedpb "github.com/ToxicToast/Azkaban-Go/proto/shared"
+	commonpb "github.com/ToxicToast/Azkaban-Go/proto/common"
 	guildpb "github.com/ToxicToast/Azkaban-Go/proto/warcraft"
 )
 
@@ -15,7 +15,7 @@ type grpcGuildService struct {
 
 // GetGuilds calls the remote GetGuilds RPC with optional limit, offset and deletion flag.
 func (s *grpcGuildService) GetGuilds(ctx context.Context, limit, offset *int64, withDeleted *bool) (*guildpb.GetGuildsResponse, error) {
-	req := &sharedpb.ListRequest{
+	req := &commonpb.ListRequest{
 		Limit:       limit,
 		Offset:      offset,
 		WithDeleted: withDeleted,

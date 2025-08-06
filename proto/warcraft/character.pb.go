@@ -7,7 +7,7 @@
 package warcraft
 
 import (
-	shared "github.com/ToxicToast/Azkaban-Go/libs/proto/shared"
+	common "github.com/ToxicToast/Azkaban-Go/libs/proto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -25,21 +25,21 @@ var File_warcraft_character_proto protoreflect.FileDescriptor
 
 const file_warcraft_character_proto_rawDesc = "" +
 	"\n" +
-	"\x18warcraft/character.proto\x12\bwarcraft\x1a\x13shared/common.proto\x1a\x1dwarcraft/character-type.proto\x1a\"warcraft/character-responses.proto\x1a!warcraft/character-requests.proto2\xc5\x04\n" +
+	"\x18warcraft/character.proto\x12\bwarcraft\x1a\x13common/common.proto\x1a\x1dwarcraft/character-type.proto\x1a\"warcraft/character-responses.proto\x1a!warcraft/character-requests.proto2\xc5\x04\n" +
 	"\x18WarcraftCharacterService\x12E\n" +
-	"\rGetCharacters\x12\x13.shared.ListRequest\x1a\x1f.warcraft.GetCharactersResponse\x12=\n" +
-	"\x11GetCharactersById\x12\x13.shared.ByIdRequest\x1a\x13.warcraft.Character\x12]\n" +
+	"\rGetCharacters\x12\x13.common.ListRequest\x1a\x1f.warcraft.GetCharactersResponse\x12=\n" +
+	"\x11GetCharactersById\x12\x13.common.ByIdRequest\x1a\x13.warcraft.Character\x12]\n" +
 	"\x1aGetCharactersByCharacterId\x12*.warcraft.GetCharacterByCharacterIdRequest\x1a\x13.warcraft.Character\x12Q\n" +
-	"\x15GetCharactersByUserId\x12\x17.shared.ByUserIdRequest\x1a\x1f.warcraft.GetCharactersResponse\x12]\n" +
+	"\x15GetCharactersByUserId\x12\x17.common.ByUserIdRequest\x1a\x1f.warcraft.GetCharactersResponse\x12]\n" +
 	"\x14GetCharactersByGuild\x12$.warcraft.GetCharacterByGuildRequest\x1a\x1f.warcraft.GetCharactersResponse\x12H\n" +
 	"\x0fCreateCharacter\x12 .warcraft.CreateCharacterRequest\x1a\x13.warcraft.Character\x12H\n" +
 	"\x0fAssignCharacter\x12 .warcraft.AssignCharacterRequest\x1a\x13.warcraft.CharacterB?Z=github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraftb\x06proto3"
 
 var file_warcraft_character_proto_goTypes = []any{
-	(*shared.ListRequest)(nil),               // 0: shared.ListRequest
-	(*shared.ByIdRequest)(nil),               // 1: shared.ByIdRequest
+	(*common.ListRequest)(nil),               // 0: common.ListRequest
+	(*common.ByIdRequest)(nil),               // 1: common.ByIdRequest
 	(*GetCharacterByCharacterIdRequest)(nil), // 2: warcraft.GetCharacterByCharacterIdRequest
-	(*shared.ByUserIdRequest)(nil),           // 3: shared.ByUserIdRequest
+	(*common.ByUserIdRequest)(nil),           // 3: common.ByUserIdRequest
 	(*GetCharacterByGuildRequest)(nil),       // 4: warcraft.GetCharacterByGuildRequest
 	(*CreateCharacterRequest)(nil),           // 5: warcraft.CreateCharacterRequest
 	(*AssignCharacterRequest)(nil),           // 6: warcraft.AssignCharacterRequest
@@ -47,10 +47,10 @@ var file_warcraft_character_proto_goTypes = []any{
 	(*Character)(nil),                        // 8: warcraft.Character
 }
 var file_warcraft_character_proto_depIdxs = []int32{
-	0, // 0: warcraft.WarcraftCharacterService.GetCharacters:input_type -> shared.ListRequest
-	1, // 1: warcraft.WarcraftCharacterService.GetCharactersById:input_type -> shared.ByIdRequest
+	0, // 0: warcraft.WarcraftCharacterService.GetCharacters:input_type -> common.ListRequest
+	1, // 1: warcraft.WarcraftCharacterService.GetCharactersById:input_type -> common.ByIdRequest
 	2, // 2: warcraft.WarcraftCharacterService.GetCharactersByCharacterId:input_type -> warcraft.GetCharacterByCharacterIdRequest
-	3, // 3: warcraft.WarcraftCharacterService.GetCharactersByUserId:input_type -> shared.ByUserIdRequest
+	3, // 3: warcraft.WarcraftCharacterService.GetCharactersByUserId:input_type -> common.ByUserIdRequest
 	4, // 4: warcraft.WarcraftCharacterService.GetCharactersByGuild:input_type -> warcraft.GetCharacterByGuildRequest
 	5, // 5: warcraft.WarcraftCharacterService.CreateCharacter:input_type -> warcraft.CreateCharacterRequest
 	6, // 6: warcraft.WarcraftCharacterService.AssignCharacter:input_type -> warcraft.AssignCharacterRequest

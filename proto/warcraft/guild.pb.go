@@ -7,7 +7,7 @@
 package warcraft
 
 import (
-	shared "github.com/ToxicToast/Azkaban-Go/libs/proto/shared"
+	common "github.com/ToxicToast/Azkaban-Go/libs/proto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -25,16 +25,16 @@ var File_warcraft_guild_proto protoreflect.FileDescriptor
 
 const file_warcraft_guild_proto_rawDesc = "" +
 	"\n" +
-	"\x14warcraft/guild.proto\x12\bwarcraft\x1a\x13shared/common.proto\x1a\x1ewarcraft/guild-responses.proto2U\n" +
+	"\x14warcraft/guild.proto\x12\bwarcraft\x1a\x13common/common.proto\x1a\x1ewarcraft/guild-responses.proto2U\n" +
 	"\x14WarcraftGuildService\x12=\n" +
-	"\tGetGuilds\x12\x13.shared.ListRequest\x1a\x1b.warcraft.GetGuildsResponseB?Z=github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraftb\x06proto3"
+	"\tGetGuilds\x12\x13.common.ListRequest\x1a\x1b.warcraft.GetGuildsResponseB?Z=github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraftb\x06proto3"
 
 var file_warcraft_guild_proto_goTypes = []any{
-	(*shared.ListRequest)(nil), // 0: shared.ListRequest
+	(*common.ListRequest)(nil), // 0: common.ListRequest
 	(*GetGuildsResponse)(nil),  // 1: warcraft.GetGuildsResponse
 }
 var file_warcraft_guild_proto_depIdxs = []int32{
-	0, // 0: warcraft.WarcraftGuildService.GetGuilds:input_type -> shared.ListRequest
+	0, // 0: warcraft.WarcraftGuildService.GetGuilds:input_type -> common.ListRequest
 	1, // 1: warcraft.WarcraftGuildService.GetGuilds:output_type -> warcraft.GetGuildsResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type

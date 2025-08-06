@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package warcraft;
 
-import "shared/common.proto";
+import "common/common.proto";
 import "warcraft/guild-responses.proto";
 
 option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
@@ -10,5 +10,5 @@ option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcra
 //
 
 service WarcraftGuildService {
-    rpc GetGuilds (shared.ListRequest) returns (GetGuildsResponse);
+    rpc GetGuilds (common.ListRequest) returns (GetGuildsResponse);
 }
