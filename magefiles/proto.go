@@ -14,6 +14,8 @@ var (
 	protoDir   = "libs/proto"
 	outputDir  = "libs/shared/proto"
 	protoFiles = []string{
+		"shared/common.proto",
+		//
 		"foodfolio/category.proto",
 		"foodfolio/company.proto",
 		"foodfolio/item.proto",
@@ -22,8 +24,21 @@ var (
 		"foodfolio/type.proto",
 		"foodfolio/warehouse.proto",
 		//
+		"warcraft/common.proto",
+		"warcraft/character-type.proto",
+		"warcraft/character-requests.proto",
+		"warcraft/character-responses.proto",
+		"warcraft/guild-type.proto",
+		"warcraft/guild-responses.proto",
 		"warcraft/character.proto",
 		"warcraft/guild.proto",
+		"warcraft/cronjob-search.proto",
+		"warcraft/cronjob-guild.proto",
+		"warcraft/cronjob-guild-roster.proto",
+		"warcraft/cronjob-character-profile.proto",
+		"warcraft/cronjob-media.proto",
+		"warcraft/cronjob-mythic.proto",
+		"warcraft/cronjob.proto",
 		//
 		"twitch/viewer.proto",
 	}

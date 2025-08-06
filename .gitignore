@@ -33,6 +33,3 @@ go.work.sum
 # Local configuration files
 .env
 apps/**/.env
-
-# Local build artifacts
-libs/shared/proto/*

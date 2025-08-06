@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package shared;
+
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/shared;shared";
+
+
+
+message ListRequest {
+  optional int64 limit = 1;
+  optional int64 offset = 2;
+  optional bool with_deleted = 3;
+}
+
+message ByIdRequest {
+  int64 id = 1;
+  optional bool with_deleted = 2;
+}
+
+message ByUserIdRequest {
+  google.protobuf.Int64Value user_id = 1;
+  optional bool with_deleted = 2;
+  optional int64 limit = 3;
+  optional int64 offset = 4;
+}

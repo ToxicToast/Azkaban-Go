@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package warcraft;
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
+
+message Key {
+    string href = 1;
+}
+
+message Self {
+    Key href = 1;
+}
+
+// 📌 z. B. FEMALE / MALE + optional name
+message Gender {
+    string type = 1;
+    optional string name = 2;
+}
+
+// 📌 z. B. ALLIANCE / HORDE + optional name
+message Faction {
+    string type = 1;
+    optional string name = 2;
+}
+
+// 📌 z. B. Nachtelf / Mensch
+message Race {
+    Key key = 1;
+    optional string name = 2;
+    int64 id = 3;
+}
+
+// 📌 z. B. Magier / Paladin
+message CharacterClass {
+    Key key = 1;
+    optional string name = 2;
+    int64 id = 3;
+}
+
+// 📌 z. B. Frost / Vergeltung
+message ActiveSpec {
+    Key key = 1;
+    optional string name = 2;
+    int64 id = 3;
+}
+
+// 📌 Realm-Daten inkl. Slug (z. B. blackmoore)
+message Realm {
+    Key key = 1;
+    optional string name = 2;
+    int64 id = 3;
+    string slug = 4;
+}
+
+// 📌 z. B. "Der große Magister"
+message ActiveTitle {
+    Key key = 1;
+    optional string name = 2;
+    int64 id = 3;
+    optional string display_string = 4;
+}
+
+// 📌 z. B. Kyrian / Venthyr
+message ChosenCovenant {
+    Key key = 1;
+    optional string name = 2;
+    int64 id = 3;
+}
+
+// 📌 Vereinfachte Darstellung eines Charakters (z. B. in Media API)
+message ShortCharacter {
+  Key key = 1;
+  string name = 2;
+  int64 id = 3;
+  Realm realm = 4;
+}
+
+// 📌 RGBA-Farbe für Rating & Crest
+message Color {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+  int32 a = 4;
+}

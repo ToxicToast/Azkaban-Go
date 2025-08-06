@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package warcraft;
+
+import "warcraft/cronjob-search.proto";
+import "warcraft/cronjob-character-profile.proto";
+import "warcraft/cronjob-guild.proto";
+import "warcraft/cronjob-guild-roster.proto";
+import "warcraft/cronjob-media.proto";
+import "warcraft/cronjob-mythic.proto";
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
+
+
+service WarcraftCronjobService {
+	rpc SearchCharacter (Search) returns (Profile);
+	rpc SearchMedia (Search) returns (Media);
+	rpc SearchKeystoneRating (Search) returns (KeystoneRating);
+	rpc SearchGuild (Search) returns (Guild);
+	rpc SearchGuildRoster (Search) returns (GuildRoster);
+}

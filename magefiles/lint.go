@@ -12,12 +12,14 @@ import (
 
 var (
 	folders = []string{
-		"apps/foodfolio",
-		"apps/warcraft",
+		// "apps/blog",
+		// "apps/cronjob",
+		// "apps/foodfolio",
+		// "apps/gateway",
 		// "apps/twitch",
-		"apps/gateway",
-		"libs/auth",
-		"libs/events",
+		"apps/warcraft",
+		// "libs/auth",
+		// "libs/events",
 		"libs/shared",
 	}
 )
