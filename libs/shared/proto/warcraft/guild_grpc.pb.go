@@ -8,6 +8,8 @@ package warcraft
 
 import (
 	context "context"
+	shared "github.com/ToxicToast/Azkaban-Go/libs/proto/shared"
+	types "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -26,7 +28,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WarcraftGuildServiceClient interface {
-	GetGuilds(ctx context.Context, in *GetGuildsRequest, opts ...grpc.CallOption) (*GetGuildsResponse, error)
+	GetGuilds(ctx context.Context, in *shared.ListRequest, opts ...grpc.CallOption) (*types.GetGuildsResponse, error)
 }
 
 type warcraftGuildServiceClient struct {
@@ -37,9 +39,9 @@ func NewWarcraftGuildServiceClient(cc grpc.ClientConnInterface) WarcraftGuildSer
 	return &warcraftGuildServiceClient{cc}
 }
 
-func (c *warcraftGuildServiceClient) GetGuilds(ctx context.Context, in *GetGuildsRequest, opts ...grpc.CallOption) (*GetGuildsResponse, error) {
+func (c *warcraftGuildServiceClient) GetGuilds(ctx context.Context, in *shared.ListRequest, opts ...grpc.CallOption) (*types.GetGuildsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetGuildsResponse)
+	out := new(types.GetGuildsResponse)
 	err := c.cc.Invoke(ctx, WarcraftGuildService_GetGuilds_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -51,7 +53,7 @@ func (c *warcraftGuildServiceClient) GetGuilds(ctx context.Context, in *GetGuild
 // All implementations must embed UnimplementedWarcraftGuildServiceServer
 // for forward compatibility.
 type WarcraftGuildServiceServer interface {
-	GetGuilds(context.Context, *GetGuildsRequest) (*GetGuildsResponse, error)
+	GetGuilds(context.Context, *shared.ListRequest) (*types.GetGuildsResponse, error)
 	mustEmbedUnimplementedWarcraftGuildServiceServer()
 }
 
@@ -62,7 +64,7 @@ type WarcraftGuildServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedWarcraftGuildServiceServer struct{}
 
-func (UnimplementedWarcraftGuildServiceServer) GetGuilds(context.Context, *GetGuildsRequest) (*GetGuildsResponse, error) {
+func (UnimplementedWarcraftGuildServiceServer) GetGuilds(context.Context, *shared.ListRequest) (*types.GetGuildsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGuilds not implemented")
 }
 func (UnimplementedWarcraftGuildServiceServer) mustEmbedUnimplementedWarcraftGuildServiceServer() {}
@@ -87,7 +89,7 @@ func RegisterWarcraftGuildServiceServer(s grpc.ServiceRegistrar, srv WarcraftGui
 }
 
 func _WarcraftGuildService_GetGuilds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetGuildsRequest)
+	in := new(shared.ListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -99,7 +101,7 @@ func _WarcraftGuildService_GetGuilds_Handler(srv interface{}, ctx context.Contex
 		FullMethod: WarcraftGuildService_GetGuilds_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftGuildServiceServer).GetGuilds(ctx, req.(*GetGuildsRequest))
+		return srv.(WarcraftGuildServiceServer).GetGuilds(ctx, req.(*shared.ListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

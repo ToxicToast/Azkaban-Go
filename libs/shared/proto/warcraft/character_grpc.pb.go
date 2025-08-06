@@ -8,6 +8,8 @@ package warcraft
 
 import (
 	context "context"
+	shared "github.com/ToxicToast/Azkaban-Go/libs/proto/shared"
+	types "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -25,11 +27,6 @@ const (
 	WarcraftCharacterService_GetCharactersByUserId_FullMethodName      = "/warcraft.WarcraftCharacterService/GetCharactersByUserId"
 	WarcraftCharacterService_GetCharactersByGuild_FullMethodName       = "/warcraft.WarcraftCharacterService/GetCharactersByGuild"
 	WarcraftCharacterService_CreateCharacter_FullMethodName            = "/warcraft.WarcraftCharacterService/CreateCharacter"
-	WarcraftCharacterService_UpdateCharacter_FullMethodName            = "/warcraft.WarcraftCharacterService/UpdateCharacter"
-	WarcraftCharacterService_UpdateCharacterGuild_FullMethodName       = "/warcraft.WarcraftCharacterService/UpdateCharacterGuild"
-	WarcraftCharacterService_UpdateCharacterMythic_FullMethodName      = "/warcraft.WarcraftCharacterService/UpdateCharacterMythic"
-	WarcraftCharacterService_UpdateCharacterRaid_FullMethodName        = "/warcraft.WarcraftCharacterService/UpdateCharacterRaid"
-	WarcraftCharacterService_UpdateCharacterMedia_FullMethodName       = "/warcraft.WarcraftCharacterService/UpdateCharacterMedia"
 	WarcraftCharacterService_AssignCharacter_FullMethodName            = "/warcraft.WarcraftCharacterService/AssignCharacter"
 )
 
@@ -37,18 +34,13 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WarcraftCharacterServiceClient interface {
-	GetCharacters(ctx context.Context, in *GetCharactersRequest, opts ...grpc.CallOption) (*GetCharactersResponse, error)
-	GetCharactersById(ctx context.Context, in *GetCharacterByIdRequest, opts ...grpc.CallOption) (*Character, error)
-	GetCharactersByCharacterId(ctx context.Context, in *GetCharacterByCharacterIdRequest, opts ...grpc.CallOption) (*Character, error)
-	GetCharactersByUserId(ctx context.Context, in *GetCharacterByUserIdRequest, opts ...grpc.CallOption) (*GetCharactersResponse, error)
-	GetCharactersByGuild(ctx context.Context, in *GetCharacterByGuildRequest, opts ...grpc.CallOption) (*GetCharactersResponse, error)
-	CreateCharacter(ctx context.Context, in *CreateCharacterRequest, opts ...grpc.CallOption) (*Character, error)
-	UpdateCharacter(ctx context.Context, in *UpdateCharacterRequest, opts ...grpc.CallOption) (*Character, error)
-	UpdateCharacterGuild(ctx context.Context, in *UpdateCharacterGuildRequest, opts ...grpc.CallOption) (*Character, error)
-	UpdateCharacterMythic(ctx context.Context, in *UpdateCharacterMythicRequest, opts ...grpc.CallOption) (*Character, error)
-	UpdateCharacterRaid(ctx context.Context, in *UpdateCharacterRaidRequest, opts ...grpc.CallOption) (*Character, error)
-	UpdateCharacterMedia(ctx context.Context, in *UpdateCharacterMediaRequest, opts ...grpc.CallOption) (*Character, error)
-	AssignCharacter(ctx context.Context, in *AssignCharacterRequest, opts ...grpc.CallOption) (*Character, error)
+	GetCharacters(ctx context.Context, in *shared.ListRequest, opts ...grpc.CallOption) (*types.GetCharactersResponse, error)
+	GetCharactersById(ctx context.Context, in *shared.ByIdRequest, opts ...grpc.CallOption) (*types.Character, error)
+	GetCharactersByCharacterId(ctx context.Context, in *types.GetCharacterByCharacterIdRequest, opts ...grpc.CallOption) (*types.Character, error)
+	GetCharactersByUserId(ctx context.Context, in *shared.ByUserIdRequest, opts ...grpc.CallOption) (*types.GetCharactersResponse, error)
+	GetCharactersByGuild(ctx context.Context, in *types.GetCharacterByGuildRequest, opts ...grpc.CallOption) (*types.GetCharactersResponse, error)
+	CreateCharacter(ctx context.Context, in *types.CreateCharacterRequest, opts ...grpc.CallOption) (*types.Character, error)
+	AssignCharacter(ctx context.Context, in *types.AssignCharacterRequest, opts ...grpc.CallOption) (*types.Character, error)
 }
 
 type warcraftCharacterServiceClient struct {
@@ -59,9 +51,9 @@ func NewWarcraftCharacterServiceClient(cc grpc.ClientConnInterface) WarcraftChar
 	return &warcraftCharacterServiceClient{cc}
 }
 
-func (c *warcraftCharacterServiceClient) GetCharacters(ctx context.Context, in *GetCharactersRequest, opts ...grpc.CallOption) (*GetCharactersResponse, error) {
+func (c *warcraftCharacterServiceClient) GetCharacters(ctx context.Context, in *shared.ListRequest, opts ...grpc.CallOption) (*types.GetCharactersResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetCharactersResponse)
+	out := new(types.GetCharactersResponse)
 	err := c.cc.Invoke(ctx, WarcraftCharacterService_GetCharacters_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -69,9 +61,9 @@ func (c *warcraftCharacterServiceClient) GetCharacters(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *warcraftCharacterServiceClient) GetCharactersById(ctx context.Context, in *GetCharacterByIdRequest, opts ...grpc.CallOption) (*Character, error) {
+func (c *warcraftCharacterServiceClient) GetCharactersById(ctx context.Context, in *shared.ByIdRequest, opts ...grpc.CallOption) (*types.Character, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
+	out := new(types.Character)
 	err := c.cc.Invoke(ctx, WarcraftCharacterService_GetCharactersById_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -79,9 +71,9 @@ func (c *warcraftCharacterServiceClient) GetCharactersById(ctx context.Context, 
 	return out, nil
 }
 
-func (c *warcraftCharacterServiceClient) GetCharactersByCharacterId(ctx context.Context, in *GetCharacterByCharacterIdRequest, opts ...grpc.CallOption) (*Character, error) {
+func (c *warcraftCharacterServiceClient) GetCharactersByCharacterId(ctx context.Context, in *types.GetCharacterByCharacterIdRequest, opts ...grpc.CallOption) (*types.Character, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
+	out := new(types.Character)
 	err := c.cc.Invoke(ctx, WarcraftCharacterService_GetCharactersByCharacterId_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -89,9 +81,9 @@ func (c *warcraftCharacterServiceClient) GetCharactersByCharacterId(ctx context.
 	return out, nil
 }
 
-func (c *warcraftCharacterServiceClient) GetCharactersByUserId(ctx context.Context, in *GetCharacterByUserIdRequest, opts ...grpc.CallOption) (*GetCharactersResponse, error) {
+func (c *warcraftCharacterServiceClient) GetCharactersByUserId(ctx context.Context, in *shared.ByUserIdRequest, opts ...grpc.CallOption) (*types.GetCharactersResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetCharactersResponse)
+	out := new(types.GetCharactersResponse)
 	err := c.cc.Invoke(ctx, WarcraftCharacterService_GetCharactersByUserId_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -99,9 +91,9 @@ func (c *warcraftCharacterServiceClient) GetCharactersByUserId(ctx context.Conte
 	return out, nil
 }
 
-func (c *warcraftCharacterServiceClient) GetCharactersByGuild(ctx context.Context, in *GetCharacterByGuildRequest, opts ...grpc.CallOption) (*GetCharactersResponse, error) {
+func (c *warcraftCharacterServiceClient) GetCharactersByGuild(ctx context.Context, in *types.GetCharacterByGuildRequest, opts ...grpc.CallOption) (*types.GetCharactersResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetCharactersResponse)
+	out := new(types.GetCharactersResponse)
 	err := c.cc.Invoke(ctx, WarcraftCharacterService_GetCharactersByGuild_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -109,9 +101,9 @@ func (c *warcraftCharacterServiceClient) GetCharactersByGuild(ctx context.Contex
 	return out, nil
 }
 
-func (c *warcraftCharacterServiceClient) CreateCharacter(ctx context.Context, in *CreateCharacterRequest, opts ...grpc.CallOption) (*Character, error) {
+func (c *warcraftCharacterServiceClient) CreateCharacter(ctx context.Context, in *types.CreateCharacterRequest, opts ...grpc.CallOption) (*types.Character, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
+	out := new(types.Character)
 	err := c.cc.Invoke(ctx, WarcraftCharacterService_CreateCharacter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -119,59 +111,9 @@ func (c *warcraftCharacterServiceClient) CreateCharacter(ctx context.Context, in
 	return out, nil
 }
 
-func (c *warcraftCharacterServiceClient) UpdateCharacter(ctx context.Context, in *UpdateCharacterRequest, opts ...grpc.CallOption) (*Character, error) {
+func (c *warcraftCharacterServiceClient) AssignCharacter(ctx context.Context, in *types.AssignCharacterRequest, opts ...grpc.CallOption) (*types.Character, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
-	err := c.cc.Invoke(ctx, WarcraftCharacterService_UpdateCharacter_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *warcraftCharacterServiceClient) UpdateCharacterGuild(ctx context.Context, in *UpdateCharacterGuildRequest, opts ...grpc.CallOption) (*Character, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
-	err := c.cc.Invoke(ctx, WarcraftCharacterService_UpdateCharacterGuild_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *warcraftCharacterServiceClient) UpdateCharacterMythic(ctx context.Context, in *UpdateCharacterMythicRequest, opts ...grpc.CallOption) (*Character, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
-	err := c.cc.Invoke(ctx, WarcraftCharacterService_UpdateCharacterMythic_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *warcraftCharacterServiceClient) UpdateCharacterRaid(ctx context.Context, in *UpdateCharacterRaidRequest, opts ...grpc.CallOption) (*Character, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
-	err := c.cc.Invoke(ctx, WarcraftCharacterService_UpdateCharacterRaid_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *warcraftCharacterServiceClient) UpdateCharacterMedia(ctx context.Context, in *UpdateCharacterMediaRequest, opts ...grpc.CallOption) (*Character, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
-	err := c.cc.Invoke(ctx, WarcraftCharacterService_UpdateCharacterMedia_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *warcraftCharacterServiceClient) AssignCharacter(ctx context.Context, in *AssignCharacterRequest, opts ...grpc.CallOption) (*Character, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Character)
+	out := new(types.Character)
 	err := c.cc.Invoke(ctx, WarcraftCharacterService_AssignCharacter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -183,18 +125,13 @@ func (c *warcraftCharacterServiceClient) AssignCharacter(ctx context.Context, in
 // All implementations must embed UnimplementedWarcraftCharacterServiceServer
 // for forward compatibility.
 type WarcraftCharacterServiceServer interface {
-	GetCharacters(context.Context, *GetCharactersRequest) (*GetCharactersResponse, error)
-	GetCharactersById(context.Context, *GetCharacterByIdRequest) (*Character, error)
-	GetCharactersByCharacterId(context.Context, *GetCharacterByCharacterIdRequest) (*Character, error)
-	GetCharactersByUserId(context.Context, *GetCharacterByUserIdRequest) (*GetCharactersResponse, error)
-	GetCharactersByGuild(context.Context, *GetCharacterByGuildRequest) (*GetCharactersResponse, error)
-	CreateCharacter(context.Context, *CreateCharacterRequest) (*Character, error)
-	UpdateCharacter(context.Context, *UpdateCharacterRequest) (*Character, error)
-	UpdateCharacterGuild(context.Context, *UpdateCharacterGuildRequest) (*Character, error)
-	UpdateCharacterMythic(context.Context, *UpdateCharacterMythicRequest) (*Character, error)
-	UpdateCharacterRaid(context.Context, *UpdateCharacterRaidRequest) (*Character, error)
-	UpdateCharacterMedia(context.Context, *UpdateCharacterMediaRequest) (*Character, error)
-	AssignCharacter(context.Context, *AssignCharacterRequest) (*Character, error)
+	GetCharacters(context.Context, *shared.ListRequest) (*types.GetCharactersResponse, error)
+	GetCharactersById(context.Context, *shared.ByIdRequest) (*types.Character, error)
+	GetCharactersByCharacterId(context.Context, *types.GetCharacterByCharacterIdRequest) (*types.Character, error)
+	GetCharactersByUserId(context.Context, *shared.ByUserIdRequest) (*types.GetCharactersResponse, error)
+	GetCharactersByGuild(context.Context, *types.GetCharacterByGuildRequest) (*types.GetCharactersResponse, error)
+	CreateCharacter(context.Context, *types.CreateCharacterRequest) (*types.Character, error)
+	AssignCharacter(context.Context, *types.AssignCharacterRequest) (*types.Character, error)
 	mustEmbedUnimplementedWarcraftCharacterServiceServer()
 }
 
@@ -205,40 +142,25 @@ type WarcraftCharacterServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedWarcraftCharacterServiceServer struct{}
 
-func (UnimplementedWarcraftCharacterServiceServer) GetCharacters(context.Context, *GetCharactersRequest) (*GetCharactersResponse, error) {
+func (UnimplementedWarcraftCharacterServiceServer) GetCharacters(context.Context, *shared.ListRequest) (*types.GetCharactersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCharacters not implemented")
 }
-func (UnimplementedWarcraftCharacterServiceServer) GetCharactersById(context.Context, *GetCharacterByIdRequest) (*Character, error) {
+func (UnimplementedWarcraftCharacterServiceServer) GetCharactersById(context.Context, *shared.ByIdRequest) (*types.Character, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCharactersById not implemented")
 }
-func (UnimplementedWarcraftCharacterServiceServer) GetCharactersByCharacterId(context.Context, *GetCharacterByCharacterIdRequest) (*Character, error) {
+func (UnimplementedWarcraftCharacterServiceServer) GetCharactersByCharacterId(context.Context, *types.GetCharacterByCharacterIdRequest) (*types.Character, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCharactersByCharacterId not implemented")
 }
-func (UnimplementedWarcraftCharacterServiceServer) GetCharactersByUserId(context.Context, *GetCharacterByUserIdRequest) (*GetCharactersResponse, error) {
+func (UnimplementedWarcraftCharacterServiceServer) GetCharactersByUserId(context.Context, *shared.ByUserIdRequest) (*types.GetCharactersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCharactersByUserId not implemented")
 }
-func (UnimplementedWarcraftCharacterServiceServer) GetCharactersByGuild(context.Context, *GetCharacterByGuildRequest) (*GetCharactersResponse, error) {
+func (UnimplementedWarcraftCharacterServiceServer) GetCharactersByGuild(context.Context, *types.GetCharacterByGuildRequest) (*types.GetCharactersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCharactersByGuild not implemented")
 }
-func (UnimplementedWarcraftCharacterServiceServer) CreateCharacter(context.Context, *CreateCharacterRequest) (*Character, error) {
+func (UnimplementedWarcraftCharacterServiceServer) CreateCharacter(context.Context, *types.CreateCharacterRequest) (*types.Character, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCharacter not implemented")
 }
-func (UnimplementedWarcraftCharacterServiceServer) UpdateCharacter(context.Context, *UpdateCharacterRequest) (*Character, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateCharacter not implemented")
-}
-func (UnimplementedWarcraftCharacterServiceServer) UpdateCharacterGuild(context.Context, *UpdateCharacterGuildRequest) (*Character, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateCharacterGuild not implemented")
-}
-func (UnimplementedWarcraftCharacterServiceServer) UpdateCharacterMythic(context.Context, *UpdateCharacterMythicRequest) (*Character, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateCharacterMythic not implemented")
-}
-func (UnimplementedWarcraftCharacterServiceServer) UpdateCharacterRaid(context.Context, *UpdateCharacterRaidRequest) (*Character, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateCharacterRaid not implemented")
-}
-func (UnimplementedWarcraftCharacterServiceServer) UpdateCharacterMedia(context.Context, *UpdateCharacterMediaRequest) (*Character, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateCharacterMedia not implemented")
-}
-func (UnimplementedWarcraftCharacterServiceServer) AssignCharacter(context.Context, *AssignCharacterRequest) (*Character, error) {
+func (UnimplementedWarcraftCharacterServiceServer) AssignCharacter(context.Context, *types.AssignCharacterRequest) (*types.Character, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AssignCharacter not implemented")
 }
 func (UnimplementedWarcraftCharacterServiceServer) mustEmbedUnimplementedWarcraftCharacterServiceServer() {
@@ -264,7 +186,7 @@ func RegisterWarcraftCharacterServiceServer(s grpc.ServiceRegistrar, srv Warcraf
 }
 
 func _WarcraftCharacterService_GetCharacters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCharactersRequest)
+	in := new(shared.ListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -276,13 +198,13 @@ func _WarcraftCharacterService_GetCharacters_Handler(srv interface{}, ctx contex
 		FullMethod: WarcraftCharacterService_GetCharacters_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).GetCharacters(ctx, req.(*GetCharactersRequest))
+		return srv.(WarcraftCharacterServiceServer).GetCharacters(ctx, req.(*shared.ListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _WarcraftCharacterService_GetCharactersById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCharacterByIdRequest)
+	in := new(shared.ByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -294,13 +216,13 @@ func _WarcraftCharacterService_GetCharactersById_Handler(srv interface{}, ctx co
 		FullMethod: WarcraftCharacterService_GetCharactersById_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).GetCharactersById(ctx, req.(*GetCharacterByIdRequest))
+		return srv.(WarcraftCharacterServiceServer).GetCharactersById(ctx, req.(*shared.ByIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _WarcraftCharacterService_GetCharactersByCharacterId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCharacterByCharacterIdRequest)
+	in := new(types.GetCharacterByCharacterIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -312,13 +234,13 @@ func _WarcraftCharacterService_GetCharactersByCharacterId_Handler(srv interface{
 		FullMethod: WarcraftCharacterService_GetCharactersByCharacterId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).GetCharactersByCharacterId(ctx, req.(*GetCharacterByCharacterIdRequest))
+		return srv.(WarcraftCharacterServiceServer).GetCharactersByCharacterId(ctx, req.(*types.GetCharacterByCharacterIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _WarcraftCharacterService_GetCharactersByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCharacterByUserIdRequest)
+	in := new(shared.ByUserIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -330,13 +252,13 @@ func _WarcraftCharacterService_GetCharactersByUserId_Handler(srv interface{}, ct
 		FullMethod: WarcraftCharacterService_GetCharactersByUserId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).GetCharactersByUserId(ctx, req.(*GetCharacterByUserIdRequest))
+		return srv.(WarcraftCharacterServiceServer).GetCharactersByUserId(ctx, req.(*shared.ByUserIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _WarcraftCharacterService_GetCharactersByGuild_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCharacterByGuildRequest)
+	in := new(types.GetCharacterByGuildRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -348,13 +270,13 @@ func _WarcraftCharacterService_GetCharactersByGuild_Handler(srv interface{}, ctx
 		FullMethod: WarcraftCharacterService_GetCharactersByGuild_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).GetCharactersByGuild(ctx, req.(*GetCharacterByGuildRequest))
+		return srv.(WarcraftCharacterServiceServer).GetCharactersByGuild(ctx, req.(*types.GetCharacterByGuildRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _WarcraftCharacterService_CreateCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateCharacterRequest)
+	in := new(types.CreateCharacterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -366,103 +288,13 @@ func _WarcraftCharacterService_CreateCharacter_Handler(srv interface{}, ctx cont
 		FullMethod: WarcraftCharacterService_CreateCharacter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).CreateCharacter(ctx, req.(*CreateCharacterRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _WarcraftCharacterService_UpdateCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateCharacterRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacter(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WarcraftCharacterService_UpdateCharacter_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacter(ctx, req.(*UpdateCharacterRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _WarcraftCharacterService_UpdateCharacterGuild_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateCharacterGuildRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterGuild(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WarcraftCharacterService_UpdateCharacterGuild_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterGuild(ctx, req.(*UpdateCharacterGuildRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _WarcraftCharacterService_UpdateCharacterMythic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateCharacterMythicRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterMythic(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WarcraftCharacterService_UpdateCharacterMythic_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterMythic(ctx, req.(*UpdateCharacterMythicRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _WarcraftCharacterService_UpdateCharacterRaid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateCharacterRaidRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterRaid(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WarcraftCharacterService_UpdateCharacterRaid_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterRaid(ctx, req.(*UpdateCharacterRaidRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _WarcraftCharacterService_UpdateCharacterMedia_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateCharacterMediaRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterMedia(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WarcraftCharacterService_UpdateCharacterMedia_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).UpdateCharacterMedia(ctx, req.(*UpdateCharacterMediaRequest))
+		return srv.(WarcraftCharacterServiceServer).CreateCharacter(ctx, req.(*types.CreateCharacterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _WarcraftCharacterService_AssignCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AssignCharacterRequest)
+	in := new(types.AssignCharacterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -474,7 +306,7 @@ func _WarcraftCharacterService_AssignCharacter_Handler(srv interface{}, ctx cont
 		FullMethod: WarcraftCharacterService_AssignCharacter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarcraftCharacterServiceServer).AssignCharacter(ctx, req.(*AssignCharacterRequest))
+		return srv.(WarcraftCharacterServiceServer).AssignCharacter(ctx, req.(*types.AssignCharacterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -509,26 +341,6 @@ var WarcraftCharacterService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateCharacter",
 			Handler:    _WarcraftCharacterService_CreateCharacter_Handler,
-		},
-		{
-			MethodName: "UpdateCharacter",
-			Handler:    _WarcraftCharacterService_UpdateCharacter_Handler,
-		},
-		{
-			MethodName: "UpdateCharacterGuild",
-			Handler:    _WarcraftCharacterService_UpdateCharacterGuild_Handler,
-		},
-		{
-			MethodName: "UpdateCharacterMythic",
-			Handler:    _WarcraftCharacterService_UpdateCharacterMythic_Handler,
-		},
-		{
-			MethodName: "UpdateCharacterRaid",
-			Handler:    _WarcraftCharacterService_UpdateCharacterRaid_Handler,
-		},
-		{
-			MethodName: "UpdateCharacterMedia",
-			Handler:    _WarcraftCharacterService_UpdateCharacterMedia_Handler,
 		},
 		{
 			MethodName: "AssignCharacter",

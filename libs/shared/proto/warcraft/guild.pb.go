@@ -7,10 +7,11 @@
 package warcraft
 
 import (
+	shared "github.com/ToxicToast/Azkaban-Go/libs/proto/shared"
+	types "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/types"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -21,319 +22,26 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Guild struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	GuildId       string                 `protobuf:"bytes,2,opt,name=guild_id,json=guildId,proto3" json:"guild_id,omitempty"`
-	Region        string                 `protobuf:"bytes,3,opt,name=region,proto3" json:"region,omitempty"`
-	Realm         string                 `protobuf:"bytes,4,opt,name=realm,proto3" json:"realm,omitempty"`
-	Name          string                 `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
-	Faction       *string                `protobuf:"bytes,6,opt,name=faction,proto3,oneof" json:"faction,omitempty"`
-	MemberCount   *int64                 `protobuf:"varint,7,opt,name=member_count,json=memberCount,proto3,oneof" json:"member_count,omitempty"`
-	Raid          *string                `protobuf:"bytes,8,opt,name=raid,proto3,oneof" json:"raid,omitempty"`
-	ActivatedAt   *string                `protobuf:"bytes,9,opt,name=activated_at,json=activatedAt,proto3,oneof" json:"activated_at,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *string                `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"`
-	DeletedAt     *string                `protobuf:"bytes,12,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Guild) Reset() {
-	*x = Guild{}
-	mi := &file_warcraft_guild_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Guild) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Guild) ProtoMessage() {}
-
-func (x *Guild) ProtoReflect() protoreflect.Message {
-	mi := &file_warcraft_guild_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Guild.ProtoReflect.Descriptor instead.
-func (*Guild) Descriptor() ([]byte, []int) {
-	return file_warcraft_guild_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Guild) GetId() int64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *Guild) GetGuildId() string {
-	if x != nil {
-		return x.GuildId
-	}
-	return ""
-}
-
-func (x *Guild) GetRegion() string {
-	if x != nil {
-		return x.Region
-	}
-	return ""
-}
-
-func (x *Guild) GetRealm() string {
-	if x != nil {
-		return x.Realm
-	}
-	return ""
-}
-
-func (x *Guild) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Guild) GetFaction() string {
-	if x != nil && x.Faction != nil {
-		return *x.Faction
-	}
-	return ""
-}
-
-func (x *Guild) GetMemberCount() int64 {
-	if x != nil && x.MemberCount != nil {
-		return *x.MemberCount
-	}
-	return 0
-}
-
-func (x *Guild) GetRaid() string {
-	if x != nil && x.Raid != nil {
-		return *x.Raid
-	}
-	return ""
-}
-
-func (x *Guild) GetActivatedAt() string {
-	if x != nil && x.ActivatedAt != nil {
-		return *x.ActivatedAt
-	}
-	return ""
-}
-
-func (x *Guild) GetCreatedAt() string {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return ""
-}
-
-func (x *Guild) GetUpdatedAt() string {
-	if x != nil && x.UpdatedAt != nil {
-		return *x.UpdatedAt
-	}
-	return ""
-}
-
-func (x *Guild) GetDeletedAt() string {
-	if x != nil && x.DeletedAt != nil {
-		return *x.DeletedAt
-	}
-	return ""
-}
-
-type GetGuildsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Limit         *int64                 `protobuf:"varint,1,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
-	Offset        *int64                 `protobuf:"varint,2,opt,name=offset,proto3,oneof" json:"offset,omitempty"`
-	WithDeleted   *bool                  `protobuf:"varint,3,opt,name=with_deleted,json=withDeleted,proto3,oneof" json:"with_deleted,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetGuildsRequest) Reset() {
-	*x = GetGuildsRequest{}
-	mi := &file_warcraft_guild_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetGuildsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetGuildsRequest) ProtoMessage() {}
-
-func (x *GetGuildsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_warcraft_guild_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetGuildsRequest.ProtoReflect.Descriptor instead.
-func (*GetGuildsRequest) Descriptor() ([]byte, []int) {
-	return file_warcraft_guild_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *GetGuildsRequest) GetLimit() int64 {
-	if x != nil && x.Limit != nil {
-		return *x.Limit
-	}
-	return 0
-}
-
-func (x *GetGuildsRequest) GetOffset() int64 {
-	if x != nil && x.Offset != nil {
-		return *x.Offset
-	}
-	return 0
-}
-
-func (x *GetGuildsRequest) GetWithDeleted() bool {
-	if x != nil && x.WithDeleted != nil {
-		return *x.WithDeleted
-	}
-	return false
-}
-
-type GetGuildsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          []*Guild               `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Total         int64                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetGuildsResponse) Reset() {
-	*x = GetGuildsResponse{}
-	mi := &file_warcraft_guild_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetGuildsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetGuildsResponse) ProtoMessage() {}
-
-func (x *GetGuildsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_warcraft_guild_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetGuildsResponse.ProtoReflect.Descriptor instead.
-func (*GetGuildsResponse) Descriptor() ([]byte, []int) {
-	return file_warcraft_guild_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *GetGuildsResponse) GetData() []*Guild {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-func (x *GetGuildsResponse) GetTotal() int64 {
-	if x != nil {
-		return x.Total
-	}
-	return 0
-}
-
 var File_warcraft_guild_proto protoreflect.FileDescriptor
 
 const file_warcraft_guild_proto_rawDesc = "" +
 	"\n" +
-	"\x14warcraft/guild.proto\x12\bwarcraft\"\xb8\x03\n" +
-	"\x05Guild\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
-	"\bguild_id\x18\x02 \x01(\tR\aguildId\x12\x16\n" +
-	"\x06region\x18\x03 \x01(\tR\x06region\x12\x14\n" +
-	"\x05realm\x18\x04 \x01(\tR\x05realm\x12\x12\n" +
-	"\x04name\x18\x05 \x01(\tR\x04name\x12\x1d\n" +
-	"\afaction\x18\x06 \x01(\tH\x00R\afaction\x88\x01\x01\x12&\n" +
-	"\fmember_count\x18\a \x01(\x03H\x01R\vmemberCount\x88\x01\x01\x12\x17\n" +
-	"\x04raid\x18\b \x01(\tH\x02R\x04raid\x88\x01\x01\x12&\n" +
-	"\factivated_at\x18\t \x01(\tH\x03R\vactivatedAt\x88\x01\x01\x12\x1d\n" +
-	"\n" +
-	"created_at\x18\n" +
-	" \x01(\tR\tcreatedAt\x12\"\n" +
-	"\n" +
-	"updated_at\x18\v \x01(\tH\x04R\tupdatedAt\x88\x01\x01\x12\"\n" +
-	"\n" +
-	"deleted_at\x18\f \x01(\tH\x05R\tdeletedAt\x88\x01\x01B\n" +
-	"\n" +
-	"\b_factionB\x0f\n" +
-	"\r_member_countB\a\n" +
-	"\x05_raidB\x0f\n" +
-	"\r_activated_atB\r\n" +
-	"\v_updated_atB\r\n" +
-	"\v_deleted_at\"\x98\x01\n" +
-	"\x10GetGuildsRequest\x12\x19\n" +
-	"\x05limit\x18\x01 \x01(\x03H\x00R\x05limit\x88\x01\x01\x12\x1b\n" +
-	"\x06offset\x18\x02 \x01(\x03H\x01R\x06offset\x88\x01\x01\x12&\n" +
-	"\fwith_deleted\x18\x03 \x01(\bH\x02R\vwithDeleted\x88\x01\x01B\b\n" +
-	"\x06_limitB\t\n" +
-	"\a_offsetB\x0f\n" +
-	"\r_with_deleted\"N\n" +
-	"\x11GetGuildsResponse\x12#\n" +
-	"\x04data\x18\x01 \x03(\v2\x0f.warcraft.GuildR\x04data\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x03R\x05total2\\\n" +
-	"\x14WarcraftGuildService\x12D\n" +
-	"\tGetGuilds\x12\x1a.warcraft.GetGuildsRequest\x1a\x1b.warcraft.GetGuildsResponseB?Z=github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraftb\x06proto3"
+	"\x14warcraft/guild.proto\x12\bwarcraft\x1a\x13shared/common.proto\x1a$warcraft/types/guild-responses.proto2[\n" +
+	"\x14WarcraftGuildService\x12C\n" +
+	"\tGetGuilds\x12\x13.shared.ListRequest\x1a!.warcraft.types.GetGuildsResponseB?Z=github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraftb\x06proto3"
 
-var (
-	file_warcraft_guild_proto_rawDescOnce sync.Once
-	file_warcraft_guild_proto_rawDescData []byte
-)
-
-func file_warcraft_guild_proto_rawDescGZIP() []byte {
-	file_warcraft_guild_proto_rawDescOnce.Do(func() {
-		file_warcraft_guild_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_warcraft_guild_proto_rawDesc), len(file_warcraft_guild_proto_rawDesc)))
-	})
-	return file_warcraft_guild_proto_rawDescData
-}
-
-var file_warcraft_guild_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_warcraft_guild_proto_goTypes = []any{
-	(*Guild)(nil),             // 0: warcraft.Guild
-	(*GetGuildsRequest)(nil),  // 1: warcraft.GetGuildsRequest
-	(*GetGuildsResponse)(nil), // 2: warcraft.GetGuildsResponse
+	(*shared.ListRequest)(nil),      // 0: shared.ListRequest
+	(*types.GetGuildsResponse)(nil), // 1: warcraft.types.GetGuildsResponse
 }
 var file_warcraft_guild_proto_depIdxs = []int32{
-	0, // 0: warcraft.GetGuildsResponse.data:type_name -> warcraft.Guild
-	1, // 1: warcraft.WarcraftGuildService.GetGuilds:input_type -> warcraft.GetGuildsRequest
-	2, // 2: warcraft.WarcraftGuildService.GetGuilds:output_type -> warcraft.GetGuildsResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // 0: warcraft.WarcraftGuildService.GetGuilds:input_type -> shared.ListRequest
+	1, // 1: warcraft.WarcraftGuildService.GetGuilds:output_type -> warcraft.types.GetGuildsResponse
+	1, // [1:2] is the sub-list for method output_type
+	0, // [0:1] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_warcraft_guild_proto_init() }
@@ -341,21 +49,18 @@ func file_warcraft_guild_proto_init() {
 	if File_warcraft_guild_proto != nil {
 		return
 	}
-	file_warcraft_guild_proto_msgTypes[0].OneofWrappers = []any{}
-	file_warcraft_guild_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_warcraft_guild_proto_rawDesc), len(file_warcraft_guild_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_warcraft_guild_proto_goTypes,
 		DependencyIndexes: file_warcraft_guild_proto_depIdxs,
-		MessageInfos:      file_warcraft_guild_proto_msgTypes,
 	}.Build()
 	File_warcraft_guild_proto = out.File
 	file_warcraft_guild_proto_goTypes = nil
