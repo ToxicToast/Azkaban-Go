@@ -6,7 +6,7 @@ run:
     - ".*_test.go"
     - ".*\\.pb\\.go"
   skip-dirs:
-    - "libs/shared/proto"     # optional, falls du dort nur generated Files hast
+    - "proto"
 
 linters:
   enable:
