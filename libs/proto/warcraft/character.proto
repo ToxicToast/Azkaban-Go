@@ -3,9 +3,9 @@ syntax = "proto3";
 package warcraft;
 
 import "shared/common.proto";
-import "warcraft/types/character-type.proto";
-import "warcraft/types/character-responses.proto";
-import "warcraft/types/character-requests.proto";
+import "warcraft/character-type.proto";
+import "warcraft/character-responses.proto";
+import "warcraft/character-requests.proto";
 
 option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
 
@@ -13,11 +13,11 @@ option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcra
 
 
 service WarcraftCharacterService {
-    rpc GetCharacters (shared.ListRequest) returns (types.GetCharactersResponse);
-    rpc GetCharactersById (shared.ByIdRequest) returns (types.Character);
-    rpc GetCharactersByCharacterId (types.GetCharacterByCharacterIdRequest) returns (types.Character);
-    rpc GetCharactersByUserId (shared.ByUserIdRequest) returns (types.GetCharactersResponse);
-    rpc GetCharactersByGuild (types.GetCharacterByGuildRequest) returns (types.GetCharactersResponse);
-    rpc CreateCharacter (types.CreateCharacterRequest) returns (types.Character);
-    rpc AssignCharacter (types.AssignCharacterRequest) returns (types.Character);
+    rpc GetCharacters (shared.ListRequest) returns (GetCharactersResponse);
+    rpc GetCharactersById (shared.ByIdRequest) returns (Character);
+    rpc GetCharactersByCharacterId (GetCharacterByCharacterIdRequest) returns (Character);
+    rpc GetCharactersByUserId (shared.ByUserIdRequest) returns (GetCharactersResponse);
+    rpc GetCharactersByGuild (GetCharacterByGuildRequest) returns (GetCharactersResponse);
+    rpc CreateCharacter (CreateCharacterRequest) returns (Character);
+    rpc AssignCharacter (AssignCharacterRequest) returns (Character);
 }

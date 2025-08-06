@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package warcraft;
+
+import "warcraft/common.proto";
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
+
+
+message CovenantProgress {
+    ChosenCovenant chosen_covenant = 1;
+    int64 renown_level = 2;
+    Key soulbinds = 3;
+}
+
+message Profile {
+    Self _links = 1;
+    int64 id = 2;
+    string name = 3;
+    Gender gender = 4;
+    Faction faction = 5;
+    Race race = 6;
+    CharacterClass character_class = 7;
+    ActiveSpec active_spec = 8;
+    Realm realm = 9;
+    int64 level = 10;
+    int64 experience = 11;
+    int64 achievement_points = 12;
+    Key achievements = 13;
+    Key titles = 14;
+    Key pvp_summary = 15;
+    Key encounters = 16;
+    Key media = 17;
+    int64 last_login_timestamp = 18;
+    int64 average_item_level = 19;
+    int64 equipped_item_level = 20;
+    Key specializations = 21;
+    Key statistics = 22;
+    Key mythic_keystone_profile = 23;
+    Key equipment = 24;
+    Key appearance = 25;
+    Key collections = 26;
+    ActiveTitle active_title = 27;
+    Key reputations = 28;
+    Key quests = 29;
+    Key achievements_statistics = 30;
+    Key professions = 31;
+    CovenantProgress covenant_progress = 32;
+    string name_search = 33;
+}

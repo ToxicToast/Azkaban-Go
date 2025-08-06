@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package warcraft;
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft;warcraft";
+
+
+message Search {
+    string region = 1;
+    string realm = 2;
+    string name = 3;
+    string namespace = 4;
+    string locale = 5;
+}
