@@ -3,7 +3,7 @@ package port
 import (
 	"context"
 
-	characterpb "github.com/ToxicToast/Azkaban-Go/libs/shared/proto/warcraft"
+	characterpb "github.com/ToxicToast/Azkaban-Go/proto/warcraft"
 )
 
 // GuildPort defines the application interface for accessing and modifying guilds.

@@ -5,10 +5,10 @@ package character
 import (
 	"context"
 
-	"github.com/ToxicToast/Azkaban-Go/apps/warcraft/internal/application/port"
+	"github.com/ToxicToast/Azkaban-Go/apps/gateway/internal/application/warcraft/port"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/helper"
-	sharedpb "github.com/ToxicToast/Azkaban-Go/libs/shared/proto/shared"
-	characterpb "github.com/ToxicToast/Azkaban-Go/libs/shared/proto/warcraft"
+	sharedpb "github.com/ToxicToast/Azkaban-Go/proto/shared"
+	characterpb "github.com/ToxicToast/Azkaban-Go/proto/warcraft"
 )
 
 // grpcCharacterService is a gRPC-based implementation of the CharacterPort interface.
