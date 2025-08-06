@@ -15,11 +15,11 @@ var (
 		// "apps/blog",
 		// "apps/cronjob",
 		// "apps/foodfolio",
-		"apps/gateway",
+		// "apps/gateway",
 		// "apps/twitch",
 		// "apps/warcraft",
-		// "libs/auth",
-		// "libs/events",
+		"libs/auth",
+		"libs/events",
 		"libs/shared",
 	}
 )
