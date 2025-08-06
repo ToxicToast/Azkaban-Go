@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package warcraft.types;
+
+import "warcraft/types/guild-type.proto";
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/types;types";
+
+message GetGuildsResponse {
+  repeated Guild data = 1;
+  int64 total = 2;
+}

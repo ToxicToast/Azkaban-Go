@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package warcraft.cronjobs;
+
+import "warcraft/common.proto"; // Für Key, Self, Realm, Faction
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/cronjobs;cronjobs";
+
+message CrestMedia {
+    warcraft.Key key = 1;
+    int64 id = 2;
+}
+
+message CrestElement {
+    int64 id = 1;
+    CrestMedia media = 2;
+    warcraft.Color color = 3;
+}
+
+message CrestBackground {
+    warcraft.Color color = 1;
+}
+
+message GuildCrest {
+    CrestElement emblem = 1;
+    CrestElement border = 2;
+    CrestBackground background = 3;
+}
+
+message Guild {
+    warcraft.Self _links = 1;
+    int64 id = 2;
+    string name = 3;
+    warcraft.Faction faction = 4;
+    int64 achievement_points = 5;
+    int64 member_count = 6;
+    warcraft.Realm realm = 7;
+    GuildCrest crest = 8;
+    warcraft.Key roster = 9;
+    warcraft.Key achievements = 10;
+    int64 created_timestamp = 11;
+    warcraft.Key activity = 12;
+    string name_search = 13;
+}
