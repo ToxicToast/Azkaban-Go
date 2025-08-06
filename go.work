@@ -2,11 +2,12 @@ go 1.24.4
 
 use (
 	.
-	./apps/foodfolio
-	./apps/gateway
-	./apps/warcraft
 	./apps/blog
 	./apps/cronjob
+	./apps/foodfolio
+	./apps/gateway
+	./apps/twitch
+	./apps/warcraft
 	./libs/auth
 	./libs/events
 	./libs/proto
