@@ -25,23 +25,19 @@ var (
 		"foodfolio/warehouse.proto",
 		//
 		"warcraft/common.proto",
-		//
-		"warcraft/types/character-type.proto",
-		"warcraft/types/character-requests.proto",
-		"warcraft/types/character-responses.proto",
-		"warcraft/types/guild-type.proto",
-		"warcraft/types/guild-responses.proto",
-		//
+		"warcraft/character-type.proto",
+		"warcraft/character-requests.proto",
+		"warcraft/character-responses.proto",
+		"warcraft/guild-type.proto",
+		"warcraft/guild-responses.proto",
 		"warcraft/character.proto",
 		"warcraft/guild.proto",
-		//
-		"warcraft/cronjobs/cronjob-search.proto",
-		"warcraft/cronjobs/cronjob-guild.proto",
-		"warcraft/cronjobs/cronjob-guild-roster.proto",
-		"warcraft/cronjobs/cronjob-character-profile.proto",
-		"warcraft/cronjobs/cronjob-media.proto",
-		"warcraft/cronjobs/cronjob-mythic.proto",
-		//
+		"warcraft/cronjob-search.proto",
+		"warcraft/cronjob-guild.proto",
+		"warcraft/cronjob-guild-roster.proto",
+		"warcraft/cronjob-character-profile.proto",
+		"warcraft/cronjob-media.proto",
+		"warcraft/cronjob-mythic.proto",
 		"warcraft/cronjob.proto",
 		//
 		"twitch/viewer.proto",
