@@ -12,9 +12,9 @@ import (
 
 var (
 	protoDir   = "libs/proto"
-	outputDir  = "libs/shared/proto"
+	outputDir  = "proto"
 	protoFiles = []string{
-		"shared/common.proto",
+		"common/common.proto",
 		//
 		"foodfolio/category.proto",
 		"foodfolio/company.proto",

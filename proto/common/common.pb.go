@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v6.31.1
-// source: shared/common.proto
+// source: common/common.proto
 
-package shared
+package common
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -33,7 +33,7 @@ type ListRequest struct {
 
 func (x *ListRequest) Reset() {
 	*x = ListRequest{}
-	mi := &file_shared_common_proto_msgTypes[0]
+	mi := &file_common_common_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +45,7 @@ func (x *ListRequest) String() string {
 func (*ListRequest) ProtoMessage() {}
 
 func (x *ListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_common_proto_msgTypes[0]
+	mi := &file_common_common_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *ListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRequest.ProtoReflect.Descriptor instead.
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return file_shared_common_proto_rawDescGZIP(), []int{0}
+	return file_common_common_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ListRequest) GetLimit() int64 {
@@ -92,7 +92,7 @@ type ByIdRequest struct {
 
 func (x *ByIdRequest) Reset() {
 	*x = ByIdRequest{}
-	mi := &file_shared_common_proto_msgTypes[1]
+	mi := &file_common_common_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -104,7 +104,7 @@ func (x *ByIdRequest) String() string {
 func (*ByIdRequest) ProtoMessage() {}
 
 func (x *ByIdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_common_proto_msgTypes[1]
+	mi := &file_common_common_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -117,7 +117,7 @@ func (x *ByIdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ByIdRequest.ProtoReflect.Descriptor instead.
 func (*ByIdRequest) Descriptor() ([]byte, []int) {
-	return file_shared_common_proto_rawDescGZIP(), []int{1}
+	return file_common_common_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ByIdRequest) GetId() int64 {
@@ -146,7 +146,7 @@ type ByUserIdRequest struct {
 
 func (x *ByUserIdRequest) Reset() {
 	*x = ByUserIdRequest{}
-	mi := &file_shared_common_proto_msgTypes[2]
+	mi := &file_common_common_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -158,7 +158,7 @@ func (x *ByUserIdRequest) String() string {
 func (*ByUserIdRequest) ProtoMessage() {}
 
 func (x *ByUserIdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_common_proto_msgTypes[2]
+	mi := &file_common_common_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -171,7 +171,7 @@ func (x *ByUserIdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ByUserIdRequest.ProtoReflect.Descriptor instead.
 func (*ByUserIdRequest) Descriptor() ([]byte, []int) {
-	return file_shared_common_proto_rawDescGZIP(), []int{2}
+	return file_common_common_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ByUserIdRequest) GetUserId() *wrapperspb.Int64Value {
@@ -202,11 +202,11 @@ func (x *ByUserIdRequest) GetOffset() int64 {
 	return 0
 }
 
-var File_shared_common_proto protoreflect.FileDescriptor
+var File_common_common_proto protoreflect.FileDescriptor
 
-const file_shared_common_proto_rawDesc = "" +
+const file_common_common_proto_rawDesc = "" +
 	"\n" +
-	"\x13shared/common.proto\x12\x06shared\x1a\x1egoogle/protobuf/wrappers.proto\"\x93\x01\n" +
+	"\x13common/common.proto\x12\x06common\x1a\x1egoogle/protobuf/wrappers.proto\"\x93\x01\n" +
 	"\vListRequest\x12\x19\n" +
 	"\x05limit\x18\x01 \x01(\x03H\x00R\x05limit\x88\x01\x01\x12\x1b\n" +
 	"\x06offset\x18\x02 \x01(\x03H\x01R\x06offset\x88\x01\x01\x12&\n" +
@@ -225,29 +225,29 @@ const file_shared_common_proto_rawDesc = "" +
 	"\x06offset\x18\x04 \x01(\x03H\x02R\x06offset\x88\x01\x01B\x0f\n" +
 	"\r_with_deletedB\b\n" +
 	"\x06_limitB\t\n" +
-	"\a_offsetB;Z9github.com/ToxicToast/Azkaban-Go/libs/proto/shared;sharedb\x06proto3"
+	"\a_offsetB;Z9github.com/ToxicToast/Azkaban-Go/libs/proto/common;commonb\x06proto3"
 
 var (
-	file_shared_common_proto_rawDescOnce sync.Once
-	file_shared_common_proto_rawDescData []byte
+	file_common_common_proto_rawDescOnce sync.Once
+	file_common_common_proto_rawDescData []byte
 )
 
-func file_shared_common_proto_rawDescGZIP() []byte {
-	file_shared_common_proto_rawDescOnce.Do(func() {
-		file_shared_common_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_shared_common_proto_rawDesc), len(file_shared_common_proto_rawDesc)))
+func file_common_common_proto_rawDescGZIP() []byte {
+	file_common_common_proto_rawDescOnce.Do(func() {
+		file_common_common_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_common_common_proto_rawDesc), len(file_common_common_proto_rawDesc)))
 	})
-	return file_shared_common_proto_rawDescData
+	return file_common_common_proto_rawDescData
 }
 
-var file_shared_common_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_shared_common_proto_goTypes = []any{
-	(*ListRequest)(nil),           // 0: shared.ListRequest
-	(*ByIdRequest)(nil),           // 1: shared.ByIdRequest
-	(*ByUserIdRequest)(nil),       // 2: shared.ByUserIdRequest
+var file_common_common_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_common_common_proto_goTypes = []any{
+	(*ListRequest)(nil),           // 0: common.ListRequest
+	(*ByIdRequest)(nil),           // 1: common.ByIdRequest
+	(*ByUserIdRequest)(nil),       // 2: common.ByUserIdRequest
 	(*wrapperspb.Int64Value)(nil), // 3: google.protobuf.Int64Value
 }
-var file_shared_common_proto_depIdxs = []int32{
-	3, // 0: shared.ByUserIdRequest.user_id:type_name -> google.protobuf.Int64Value
+var file_common_common_proto_depIdxs = []int32{
+	3, // 0: common.ByUserIdRequest.user_id:type_name -> google.protobuf.Int64Value
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -255,29 +255,29 @@ var file_shared_common_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_shared_common_proto_init() }
-func file_shared_common_proto_init() {
-	if File_shared_common_proto != nil {
+func init() { file_common_common_proto_init() }
+func file_common_common_proto_init() {
+	if File_common_common_proto != nil {
 		return
 	}
-	file_shared_common_proto_msgTypes[0].OneofWrappers = []any{}
-	file_shared_common_proto_msgTypes[1].OneofWrappers = []any{}
-	file_shared_common_proto_msgTypes[2].OneofWrappers = []any{}
+	file_common_common_proto_msgTypes[0].OneofWrappers = []any{}
+	file_common_common_proto_msgTypes[1].OneofWrappers = []any{}
+	file_common_common_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_shared_common_proto_rawDesc), len(file_shared_common_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_common_proto_rawDesc), len(file_common_common_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_shared_common_proto_goTypes,
-		DependencyIndexes: file_shared_common_proto_depIdxs,
-		MessageInfos:      file_shared_common_proto_msgTypes,
+		GoTypes:           file_common_common_proto_goTypes,
+		DependencyIndexes: file_common_common_proto_depIdxs,
+		MessageInfos:      file_common_common_proto_msgTypes,
 	}.Build()
-	File_shared_common_proto = out.File
-	file_shared_common_proto_goTypes = nil
-	file_shared_common_proto_depIdxs = nil
+	File_common_common_proto = out.File
+	file_common_common_proto_goTypes = nil
+	file_common_common_proto_depIdxs = nil
 }

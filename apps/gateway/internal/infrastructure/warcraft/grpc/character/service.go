@@ -5,10 +5,10 @@ package character
 import (
 	"context"
 
-	"github.com/ToxicToast/Azkaban-Go/apps/warcraft/internal/application/port"
+	"github.com/ToxicToast/Azkaban-Go/apps/gateway/internal/application/warcraft/port"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/helper"
-	sharedpb "github.com/ToxicToast/Azkaban-Go/libs/shared/proto/shared"
-	characterpb "github.com/ToxicToast/Azkaban-Go/libs/shared/proto/warcraft"
+	commonpb "github.com/ToxicToast/Azkaban-Go/proto/common"
+	characterpb "github.com/ToxicToast/Azkaban-Go/proto/warcraft"
 )
 
 // grpcCharacterService is a gRPC-based implementation of the CharacterPort interface.
@@ -18,7 +18,7 @@ type grpcCharacterService struct {
 
 // GetCharacters calls the remote GetCharacters RPC with optional limit, offset and deletion flag.
 func (s *grpcCharacterService) GetCharacters(ctx context.Context, limit, offset *int64, withDeleted *bool) (*characterpb.GetCharactersResponse, error) {
-	req := &sharedpb.ListRequest{
+	req := &commonpb.ListRequest{
 		Limit:       limit,
 		Offset:      offset,
 		WithDeleted: withDeleted,
@@ -27,7 +27,7 @@ func (s *grpcCharacterService) GetCharacters(ctx context.Context, limit, offset 
 }
 
 func (s *grpcCharacterService) GetCharactersByID(ctx context.Context, id int64, withDeleted *bool) (*characterpb.Character, error) {
-	req := &sharedpb.ByIdRequest{
+	req := &commonpb.ByIdRequest{
 		Id:          id,
 		WithDeleted: withDeleted,
 	}
@@ -44,7 +44,7 @@ func (s *grpcCharacterService) GetCharactersByCharacterID(ctx context.Context, c
 
 func (s *grpcCharacterService) GetCharactersByUserID(ctx context.Context, userID *int64, withDeleted *bool, limit, offset *int64) (*characterpb.GetCharactersResponse, error) {
 	userIDWrapped := helper.WrapInt64(userID)
-	req := &sharedpb.ByUserIdRequest{
+	req := &commonpb.ByUserIdRequest{
 		UserId:      userIDWrapped,
 		WithDeleted: withDeleted,
 		Limit:       limit,

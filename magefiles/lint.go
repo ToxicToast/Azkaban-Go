@@ -17,9 +17,9 @@ var (
 		// "apps/foodfolio",
 		// "apps/gateway",
 		// "apps/twitch",
-		"apps/warcraft",
-		// "libs/auth",
-		// "libs/events",
+		// "apps/warcraft",
+		"libs/auth",
+		"libs/events",
 		"libs/shared",
 	}
 )

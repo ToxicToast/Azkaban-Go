@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package shared;
+package common;
 
 import "google/protobuf/wrappers.proto";
 
-option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/shared;shared";
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/common;common";
 
 
 
