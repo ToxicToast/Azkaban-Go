@@ -108,14 +108,19 @@ func coercePathParam(s string) any {
 	return s
 }
 
-func NewClient(envName, port string, pool *grpcclient.Client) *Client {
-	if envName == "prod" || envName == "staging" {
+func setMode(envName string) {
+	switch envName {
+	case "prod", "staging":
 		gin.SetMode(gin.ReleaseMode)
-	} else if envName == "dev" {
+	case "dev":
 		gin.SetMode(gin.DebugMode)
-	} else {
+	default:
 		gin.SetMode(gin.TestMode)
 	}
+}
+
+func NewClient(envName, port string, pool *grpcclient.Client) *Client {
+	setMode(envName)
 	return &Client{
 		router: gin.Default(),
 		port:   port,

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	"time"
 
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/helper"
 	"google.golang.org/grpc"
@@ -46,21 +45,13 @@ func (c *Client) Get(ctx context.Context, service string) (*grpc.ClientConn, err
 	c.mu.Unlock()
 
 	// 3) Dial (blocking, mit Timeout übers ctx)
-	opts := []grpc.DialOption{grpc.WithBlock()}
+	var opts []grpc.DialOption
 	if sc.Insecure {
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	} else {
-		// TODO: TLS creds bauen (CA, ServerName, mTLS etc.)
 	}
-
-	to := time.Duration(sc.DialTimeoutms) * time.Millisecond
-	if to <= 0 {
-		to = 3 * time.Second
-	}
-	dctx, cancel := context.WithTimeout(ctx, to)
-	defer cancel()
-
-	cc, err := grpc.DialContext(dctx, target, opts...)
+	// TODO: TLS creds bauen (CA, ServerName, mTLS etc.)
+	
+	cc, err := grpc.NewClient(target, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("dial %s: %w", target, err)
 	}

@@ -150,7 +150,6 @@ type Client struct {
 	root                string
 	baseConfigPaths     []string
 	overrideConfigPaths []string
-	cfg                 *Config
 }
 
 func NewClient(root string, overrideConfigPaths []string) *Client {
