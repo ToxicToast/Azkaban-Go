@@ -1,0 +1,8 @@
+downstreams:
+  discoveryMode: "static"
+  services:
+    warcraft:
+      endpoints:
+        - "localhost:8082"
+      insecure: true
+      dial_timeout_ms: 2000

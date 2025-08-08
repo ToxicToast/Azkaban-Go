@@ -1,0 +1,7 @@
+health:
+  livenessPath: "/healthz"
+  readinessPath: "/readyz"
+  checkIntervals:
+    grpcTargets: 5s
+    redis: 5s
+    kafka: 10s

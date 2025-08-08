@@ -1,0 +1,14 @@
+events:
+  kafka:
+    brokers: ["kafka:9092"]
+    clientID: "gateway"
+    producer:
+      acks: "all"
+      compression: "snappy"
+      linger: 10ms
+      maxInflight: 5
+    consumer:
+      groupID: "gateway-consumer"
+      sessionTimeout: 10s
+      autoOffsetReset: "latest"
+    topics: []

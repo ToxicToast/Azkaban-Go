@@ -1,0 +1,4 @@
+app:
+  name: ""
+  env: "local"
+  version: "0.0.1"

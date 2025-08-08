@@ -1,0 +1,10 @@
+downstreams:
+  policies:
+    blog:
+      minVersion: ">=1.0.0"
+    foodfolio:
+      minVersion: ">=1.0.0"
+    twitch:
+      minVersion: ">=1.0.0"
+    warcraft:
+      minVersion: ">=1.0.0"

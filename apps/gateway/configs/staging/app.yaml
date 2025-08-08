@@ -1,0 +1,4 @@
+app:
+  name: "dementor-staging"
+  env: "staging"
+  version: "0.1.0"

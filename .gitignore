@@ -24,12 +24,12 @@ profile.cov
 go.work.sum
 
 # env file
-.env
+apps/gateway/.env
 
 # Editor/IDE
 # .idea/
 # .vscode/
 
 # Local configuration files
-.env
-apps/**/.env
+apps/gateway/.env
+apps/gateway/.env

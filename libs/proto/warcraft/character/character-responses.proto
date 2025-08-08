@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package warcraft.character;
+
+import "warcraft/character/character-type.proto";
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/character;character";
+
+message GetCharactersResponse {
+  repeated Character data = 1;
+  int64 total = 2;
+}

@@ -1,0 +1,17 @@
+server:
+  http:
+    port: 8080
+    readTimeout: 10s
+    writeTimeout: 30s
+    idleTimeout: 120s
+  cors:
+    enabled: true
+    origins: ["https://www.toxictoast.de", "https://www.ascend-guild.de"]
+    methods: [ "GET","POST","PUT","PATCH","DELETE","OPTIONS" ]
+    headers: [ "Authorization","Content-Type","X-Request-ID" ]
+    allowCredentials: true
+    maxAge: 600
+  rateLimit:
+    enabled: true
+    requestsPerMinute: 600
+    burst: 100

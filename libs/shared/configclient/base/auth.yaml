@@ -1,0 +1,8 @@
+auth:
+  provider: "authentik"
+  jwksURL: "https://auth.toxictoast.de/application/o/azkaban/jwks/"
+  audience: "azkaban"
+  issuer: "https://auth.toxictoast.de/application/o/azkaban/"
+  requiredGroups:
+    - "azkaban"
+  routePolicies: []

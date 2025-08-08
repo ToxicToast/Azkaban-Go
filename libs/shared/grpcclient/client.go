@@ -1,49 +1,123 @@
-// Package grpcclient provides reusable gRPC client logic for connecting to services.
 package grpcclient
 
 import (
+	"context"
 	"fmt"
 	"sync"
+	"time"
 
+	"github.com/ToxicToast/Azkaban-Go/libs/shared/helper"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
-// Client is a reusable gRPC client that manages connections to gRPC servers.
 type Client struct {
-	mu          sync.RWMutex
-	connections map[string]*grpc.ClientConn
-	dialOps     []grpc.DialOption
+	mu    sync.Mutex
+	conns map[string]*grpc.ClientConn // key = service name
+	cfg   map[string]helper.ServiceCfg
+	idx   map[string]int
 }
 
-// NewClient returns a new internal gRPC client with optional dial options.
-func NewClient(dialOps ...grpc.DialOption) *Client {
+func NewClient(services map[string]helper.ServiceCfg) *Client {
 	return &Client{
-		connections: make(map[string]*grpc.ClientConn),
-		dialOps:     dialOps,
+		conns: map[string]*grpc.ClientConn{},
+		cfg:   services,
+		idx:   make(map[string]int),
 	}
 }
 
-// GetConnection returns a cached or newly established gRPC connection for the given address.
-func (c *Client) GetConnection(addr string) (*grpc.ClientConn, error) {
-	c.mu.RLock()
-	conn, ok := c.connections[addr]
-	c.mu.RUnlock()
-
-	if ok {
-		return conn, nil
+func (c *Client) Get(ctx context.Context, service string) (*grpc.ClientConn, error) {
+	// 1) Cache-Hit?
+	c.mu.Lock()
+	if cc, ok := c.conns[service]; ok && cc != nil {
+		c.mu.Unlock()
+		return cc, nil
 	}
+
+	// 2) Config + Endpoint wählen (Round-Robin)
+	sc, ok := c.cfg[service]
+	if !ok || len(sc.Endpoints) == 0 {
+		c.mu.Unlock()
+		return nil, fmt.Errorf("unknown service %q or no endpoints", service)
+	}
+	i := c.idx[service] % len(sc.Endpoints)
+	c.idx[service]++
+	target := sc.Endpoints[i]
+	c.mu.Unlock()
+
+	// 3) Dial (blocking, mit Timeout übers ctx)
+	opts := []grpc.DialOption{grpc.WithBlock()}
+	if sc.Insecure {
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	} else {
+		// TODO: TLS creds bauen (CA, ServerName, mTLS etc.)
+	}
+
+	to := time.Duration(sc.DialTimeoutms) * time.Millisecond
+	if to <= 0 {
+		to = 3 * time.Second
+	}
+	dctx, cancel := context.WithTimeout(ctx, to)
+	defer cancel()
+
+	cc, err := grpc.DialContext(dctx, target, opts...)
+	if err != nil {
+		return nil, fmt.Errorf("dial %s: %w", target, err)
+	}
+
+	// 4) Conn speichern (kurz locken) und zurück
+	c.mu.Lock()
+	if _, exists := c.conns[service]; !exists {
+		c.conns[service] = cc
+	}
+	c.mu.Unlock()
+
+	return cc, nil
+}
+
+/*func (c *Client) Get(service string) (*grpc.ClientConn, error) {
+	c.mu.Lock()
+	if cc, ok := c.conns[service]; ok {
+		c.mu.Unlock()
+		log.Printf("downstream cache hit service=%s conn=%p state=%s", service, cc, cc.GetState().String())
+		return cc, nil
+	}
+
+	log.Printf("dialing service=%s; connection=%p", service, c.conns[service])
+
+	sc, ok := c.cfg[service]
+	if !ok || len(sc.Endpoints) == 0 {
+		c.mu.Unlock()
+		return nil, fmt.Errorf("unknown service %q or no endpoints (%s)", service, len(sc.Endpoints))
+	}
+
+	target := sc.Endpoints[0]
+
+	log.Printf("dialing downstream %q for service=%s", target, service)
+
+	opts := []grpc.DialOption{
+		grpc.WithBlock(),
+	}
+	if sc.Insecure {
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	} else {
+		// ca_file, server_name etc.
+	}
+
+	to := time.Duration(sc.DialTimeoutms) * time.Millisecond
+	if to <= 0 {
+		to = 3 * time.Second
+	}
+	cc, err := grpc.NewClient(target, opts...)
+	if err != nil {
+		return nil, fmt.Errorf("dial %s: %w", target, err)
+	}
+
+	log.Printf("downstream connected service=%s target=%s conn=%p state=%s",
+		service, target, cc, cc.GetState().String())
 
 	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	if conn, ok := c.connections[addr]; ok {
-		return conn, nil
-	}
-	conn, err := grpc.NewClient(addr, c.dialOps...)
-	if err != nil {
-		return nil, fmt.Errorf("failed to dial gRPC server %s: %w", addr, err)
-	}
-
-	c.connections[addr] = conn
-	return conn, nil
-}
+	c.conns[service] = cc
+	c.mu.Unlock()
+	return cc, nil
+}*/

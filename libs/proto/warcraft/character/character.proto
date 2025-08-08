@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package warcraft.character;
+
+import "warcraft/character/character-type.proto";
+import "warcraft/character/character-responses.proto";
+import "warcraft/character/character-requests.proto";
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/character;character";
+
+//
+
+
+service WarcraftCharacterService {
+    rpc GetCharacters (GetCharactersRequest) returns (GetCharactersResponse);
+    rpc GetCharactersById (GetCharacterByIdRequest) returns (Character);
+    rpc GetCharactersByCharacterId (GetCharacterByCharacterIdRequest) returns (Character);
+    rpc GetCharactersByUserId (GetCharacterByUserIdRequest) returns (GetCharactersResponse);
+    rpc GetCharactersByGuild (GetCharacterByGuildRequest) returns (GetCharactersResponse);
+    rpc CreateCharacter (CreateCharacterRequest) returns (Character);
+    rpc AssignCharacter (AssignCharacterRequest) returns (Character);
+}

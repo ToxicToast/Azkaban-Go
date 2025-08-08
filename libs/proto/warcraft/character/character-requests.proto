@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package warcraft.character;
+
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/character;character";
+
+
+
+message GetCharactersRequest {
+  optional int64 limit = 1;
+  optional int64 offset = 2;
+  optional bool with_deleted = 3;
+}
+
+message GetCharacterByIdRequest {
+  int64 id = 1;
+  optional bool with_deleted = 2;
+}
+
+message GetCharacterByUserIdRequest {
+  google.protobuf.Int64Value user_id = 1;
+  optional bool with_deleted = 2;
+  optional int64 limit = 3;
+  optional int64 offset = 4;
+}
+
+message GetCharacterByCharacterIdRequest {
+  string character_id = 1;
+  optional bool with_deleted = 2;
+}
+
+message GetCharacterByGuildRequest {
+  optional string guild = 1;
+  optional bool with_deleted = 2;
+  optional int64 limit = 3;
+  optional int64 offset = 4;
+}
+
+message CreateCharacterRequest {
+  string region = 1;
+  string realm = 2;
+  string name = 3;
+}
+
+message AssignCharacterRequest {
+  int64 id = 1;
+  google.protobuf.Int64Value user_id = 2;
+}

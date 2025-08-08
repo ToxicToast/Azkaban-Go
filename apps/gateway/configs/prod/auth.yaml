@@ -1,0 +1,10 @@
+auth:
+  routePolicies:
+    - prefix: "/api/v1/blog"
+      groups: ["blog"]
+    - prefix: "/api/v1/foodfolio"
+      groups: ["foodfolio"]
+    - prefix: "/api/v1/twitch"
+      groups: ["twitch"]
+    - prefix: "/api/v1/warcraft"
+      groups: ["warcraft"]

@@ -1,0 +1,10 @@
+cache:
+  redis:
+    addr: "redis:6379"
+    db: 0
+    tls: false
+    dialTimeout: 1s
+    readTimeout: 500ms
+    writeTimeout: 500ms
+    defaultTTL: 60s
+    keyPrefix: "azk:gw:"

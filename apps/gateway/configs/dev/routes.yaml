@@ -1,0 +1,84 @@
+routes:
+
+  - name: get_warcraft_characters
+    http:
+      method: GET
+      path: /api/v1/warcraft/characters
+      query:
+        limit: number
+        offset: number
+        with_deleted: boolean
+    grpc:
+      service: warcraft
+      target: warcraft.character.WarcraftCharacterService.GetCharacters
+      timeout_ms: 2000
+    mapping:
+      path_params: {}
+      query_params:
+        limit: limit
+        offset: offset
+        with_deleted: with_deleted
+    auth:
+      groups: ["warcraft"]
+    cache:
+      ttl_ms: 5000
+
+  - name: get_warcraft_characters_by_id
+    http:
+      method: GET
+      path: /api/v1/warcraft/characters/{id}
+      query:
+        with_deleted: boolean
+    grpc:
+      service: warcraft
+      target: warcraft.character.WarcraftCharacterService.GetCharactersById
+      timeout_ms: 2000
+    mapping:
+      path_params:
+        id: id
+      query_params:
+        with_deleted: with_deleted
+    auth:
+      groups: [ "warcraft" ]
+    cache:
+      ttl_ms: 5000
+
+  - name: get_warcraft_characters_by_character_id
+    http:
+      method: GET
+      path: /api/v1/warcraft/characters/character/{character_id}
+      query:
+        with_deleted: boolean
+    grpc:
+      service: warcraft
+      target: warcraft.character.WarcraftCharacterService.GetCharactersByCharacterId
+      timeout_ms: 2000
+    mapping:
+      path_params:
+        character_id: character_id
+      query_params:
+        with_deleted: with_deleted
+    auth:
+      groups: [ "warcraft" ]
+    cache:
+      ttl_ms: 5000
+
+  - name: get_warcraft_characters_by_user_id
+    http:
+      method: GET
+      path: /api/v1/warcraft/characters/user/{user_id}
+      query:
+        with_deleted: boolean
+    grpc:
+      service: warcraft
+      target: warcraft.character.WarcraftCharacterService.GetCharactersByUserId
+      timeout_ms: 2000
+    mapping:
+      path_params:
+        user_id: user_id
+      query_params:
+        with_deleted: with_deleted
+    auth:
+      groups: [ "warcraft" ]
+    cache:
+      ttl_ms: 5000

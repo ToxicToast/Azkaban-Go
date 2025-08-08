@@ -1,0 +1,22 @@
+observability:
+  log:
+    level: "debug"          # debug|info|warn|error
+    json: true
+    sampling:
+      enabled: true
+      initial: 100
+      thereafter: 1000
+  tracing:
+    enabled: true
+    exporter: "stdout"
+    insecure: true
+    serviceName: ""
+  metrics:
+    enabled: true
+    prom:
+      path: "/metrics"
+      port: 9090
+  profiling:
+    pprof:
+      enabled: true
+      path: "/debug/pprof"

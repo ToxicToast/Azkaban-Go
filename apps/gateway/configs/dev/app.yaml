@@ -1,0 +1,4 @@
+app:
+  name: "dementor-dev"
+  env: "dev"
+  version: "0.0.1"

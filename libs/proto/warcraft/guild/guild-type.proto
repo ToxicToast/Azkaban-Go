@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package warcraft.guild;
+
+option go_package = "github.com/ToxicToast/Azkaban-Go/libs/proto/warcraft/guild;guild";
+
+message Guild {
+  int64 id = 1;
+  string guild_id = 2;
+  string region = 3;
+  string realm = 4;
+  string name = 5;
+  optional string faction = 6;
+  optional int64 member_count = 7;
+  optional string raid = 8;
+  optional string activated_at = 9;
+  string created_at = 10;
+  optional string updated_at = 11;
+  optional string deleted_at = 12;
+}

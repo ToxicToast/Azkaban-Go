@@ -1,0 +1,6 @@
+features:
+  sse:
+    enabled: true
+    heartbeatInterval: 20s
+  httpToGrpc:
+    strictValidation: true

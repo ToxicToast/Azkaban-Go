@@ -1,0 +1,15 @@
+server:
+  http:
+    port: 8081
+    readTimeout: 5s
+    writeTimeout: 20s
+    idleTimeout: 60s
+  cors:
+    enabled: true
+    origins: ["http://localhost:5173", "http://localhost:3000"]
+    methods: [ "GET","POST","PUT","PATCH","DELETE","OPTIONS" ]
+    headers: [ "Authorization","Content-Type","X-Request-ID" ]
+    allowCredentials: true
+    maxAge: 600
+  rateLimit:
+    enabled: false
