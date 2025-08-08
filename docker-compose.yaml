@@ -1,0 +1,33 @@
+services:
+  gateway:
+    image: toxictoast/gateway-go:dev
+    ports:
+      - 8080:8080
+    environment:
+      APP_ENV: "dev"
+      APP_VERSION: "0.0.1-DOCKER"
+      APP_NAME: "dementor"
+      SERVER_HTTP_PORT: 8080
+      SERVER_CORS_ENABLED: false
+      SERVER_CORS_ORIGINS: "http://localhost:5173"
+      SERVER_CORS_METHODS: "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+      SERVER_CORS_HEADERS: "Authorization,Content-Type,X-Request-ID"
+      SERVER_CORS_ALLOW_CREDENTIALS: false
+      ROUTES_NAME: "get_warcraft_characters"
+      ROUTES_HTTP_METHOD: "GET"
+      ROUTES_HTTP_PATH: "/api/v1/warcraft/characters"
+      ROUTES_HTTP_QUERY_LIMIT: "number"
+      ROUTES_GRPC_SERVICE: "warcraft"
+      ROUTES_GRPC_TARGET: "warcraft.character.WarcraftCharacterService.GetCharacters"
+      ROUTES_MAPPING_QUERY_PARAMS_LIMIT: "limit"
+      ROUTES_MAPPING_QUERY_PARAMS_OFFSET: "offset"
+      ROUTES_MAPPING_QUERY_PARAMS_WITH_DELETED: "with_deleted"
+      DOWNSTREAMS_DISCOVERY_MODE: "static"
+      DOWNSTREAMS_SERVICES_WARCRAFT_ENDPOINTS: "warcraft:8082"
+      DOWNSTREAMS_SERVICES_WARCRAFT_INSECURE: "true"
+      DOWNSTREAMS_SERVICES_WARCRAFT_DIAL_TIMEOUT_MS: "2000"
+
+  warcraft:
+    image: toxictoast/warcraft-go:dev
+    ports:
+      - 8082:8082/tcp

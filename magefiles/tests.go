@@ -14,7 +14,7 @@ var testFolder = "_test"
 func testForFiles() bool {
 	fmt.Println("🔍 Checking for test files...")
 
-	cmd := exec.Command("find", ".", "-type", "f", "-name", "*_test.go")
+	cmd := exec.Command("find", "./"+testFolder, "-type", "f", "-name", "*_test.go")
 	// cmd.Stdout = os.Stdout
 	// cmd.Stderr = os.Stderr
 

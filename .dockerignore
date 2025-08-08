@@ -1,0 +1,16 @@
+.git
+.github
+.qodo
+docs
+magefiles
+.gitignore
+.golangci.bck.yml
+.golangci.yml
+coverage.out
+README.md
+**/bin
+**/out
+**/*.log
+**/.DS_Store
+**/node_modules
+**/tmp

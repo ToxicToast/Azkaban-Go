@@ -1,6 +1,6 @@
 server:
   http:
-    port: 8081
+    port: 8080
     readTimeout: 5s
     writeTimeout: 20s
     idleTimeout: 60s

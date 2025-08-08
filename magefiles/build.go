@@ -27,6 +27,15 @@ func buildCronjob() error {
 	return cmd.Run()
 }
 
+func buildFoodfolio() error {
+	fmt.Println("🔍 Build Foodfolio Service...")
+	cmd := exec.Command("go", "build", "-o", "bin/foodfolio", "apps/foodfolio/cmd/main.go")
+	fmt.Printf("→ %s\n", cmd)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
 func buildGateway() error {
 	fmt.Println("🔍 Build Gateway Service...")
 	cmd := exec.Command("go", "build", "-o", "bin/gateway", "apps/gateway/cmd/main.go")
@@ -67,6 +76,11 @@ func Build() error {
 		return fmt.Errorf("failed to build cronjob: %w", errCronjob)
 	}
 
+	var errFoodfolio = buildFoodfolio()
+	if errFoodfolio != nil {
+		return fmt.Errorf("failed to build foodfolio: %w", errFoodfolio)
+	}
+
 	var errGateway = buildGateway()
 	if errGateway != nil {
 		return fmt.Errorf("failed to build gateway: %w", errGateway)
@@ -79,7 +93,7 @@ func Build() error {
 
 	var errWarcraft = buildWarcraft()
 	if errWarcraft != nil {
-		return fmt.Errorf("failed to build warcraft: %w", errTwitch)
+		return fmt.Errorf("failed to build warcraft: %w", errWarcraft)
 	}
 
 	return nil
