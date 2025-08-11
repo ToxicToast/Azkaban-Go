@@ -49,7 +49,7 @@ type Config struct {
 		DiscoveryMode string
 		Services      map[string]helper.ServiceCfg
 		Registry      struct {
-			Target   string `koanf:"REGISTRY_DNS_URL"`
+			Target   string
 			CacheTTL time.Duration
 		}
 		Policies map[string]struct {
@@ -85,12 +85,13 @@ type Config struct {
 		}
 	}
 	Health struct {
-		LivenessPath   string `koanf:"LIVENESS_PATH"`
-		ReadinessPath  string `koanf:"READINESS_PATH"`
+		Services       []string
+		LivenessPath   string
+		ReadinessPath  string
 		CheckIntervals struct {
-			GrpcTargets time.Duration `koanf:"GRPC_TARGETS_INTERVAL"`
-			Redis       time.Duration `koanf:"REDIS_INTERVAL"`
-			Kafka       time.Duration `koanf:"KAFKA_INTERVAL"`
+			GrpcTargets time.Duration
+			Redis       time.Duration
+			Kafka       time.Duration
 		}
 	}
 	Observability struct {

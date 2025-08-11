@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -10,6 +11,7 @@ import (
 	"github.com/ToxicToast/Azkaban-Go/apps/gateway/internal/grpcclients"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/configclient"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/grpcclient"
+	"github.com/ToxicToast/Azkaban-Go/libs/shared/healthmon"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/registryclient"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/routerclient"
 )
@@ -17,10 +19,12 @@ import (
 var root = "."
 
 var (
+	bgCtx      context.Context
 	cfg        *configclient.Config
 	router     *routerclient.Client
 	registry   registryclient.Registry
 	grpcClient *grpcclient.Client
+	monitor    *healthmon.Monitor
 )
 
 func loadConfigs() {
@@ -55,13 +59,29 @@ func loadGrpcClients() {
 func loadRouter() {
 	router = routerclient.NewClient(cfg.App.Env, ":"+cfg.Server.Http.Port, grpcClient)
 	router.BuildRoutes(cfg.Routes, registry)
-	router.BuildHealthRoute([]string{"warcraft"}, cfg.Routes, registry)
+	router.BuildHealthRoute(monitor, cfg.Health.Services, cfg.Routes, registry, cfg.Health.LivenessPath, cfg.Health.ReadinessPath)
+}
+
+func loadMonitor() {
+
+	monitor = healthmon.NewMonitor(
+		cfg.Health.Services,
+		func(c context.Context, svc string) error {
+			return grpcClient.Ping(c, svc)
+		},
+		cfg.Health.CheckIntervals.GrpcTargets,
+		cfg.Health.CheckIntervals.Redis,
+		cfg.Health.CheckIntervals.Kafka,
+	)
+	monitor.Start(bgCtx)
 }
 
 func init() {
+	bgCtx = context.Background()
 	loadConfigs()
 	loadRegistry()
 	loadGrpcClients()
+	loadMonitor()
 	loadRouter()
 }
 
@@ -69,9 +89,6 @@ func main() {
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
-	fmt.Printf("Starting %s (v%s) in %s mode...\n", cfg.App.Name, cfg.App.Version, cfg.App.Env)
-	fmt.Printf("On Port %v...\n", cfg.Server.Http.Port)
 
 	go router.RunServer()
 	<-stop

@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/grpcclient"
+	"github.com/ToxicToast/Azkaban-Go/libs/shared/healthmon"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/helper"
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/registryclient"
 	"github.com/gin-gonic/gin"
@@ -128,12 +129,18 @@ func NewClient(envName, port string, pool *grpcclient.Client) *Client {
 	}
 }
 
-func (c *Client) BuildHealthRoute(requiredServices []string, routes []helper.Routes, reg registryclient.Registry) {
-	c.router.GET("/livez", func(ctx *gin.Context) {
+func (c *Client) BuildHealthRoute(
+	monitor *healthmon.Monitor,
+	requiredServices []string,
+	routes []helper.Routes,
+	reg registryclient.Registry,
+	livenessPath, readinessPath string,
+) {
+	c.router.GET(readinessPath, func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "ok")
 	})
 
-	c.router.GET("/healthz", func(ctx *gin.Context) {
+	c.router.GET(livenessPath, func(ctx *gin.Context) {
 		for _, rt := range routes {
 			key := normalizeTarget(rt.Grpc.Target)
 			if _, ok := reg.Get(key); !ok {
@@ -145,6 +152,20 @@ func (c *Client) BuildHealthRoute(requiredServices []string, routes []helper.Rou
 				return
 			}
 		}
+
+		snap := monitor.Snapshot()
+		if !monitor.AllOK(requiredServices) {
+			ctx.JSON(http.StatusServiceUnavailable, gin.H{
+				"status":   "not_ready",
+				"snapshot": snap,
+			})
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":   "ready",
+			"snapshot": snap,
+		})
+
 		for _, svc := range requiredServices {
 			if err := c.pool.Ping(ctx.Request.Context(), svc); err != nil {
 				ctx.JSON(http.StatusServiceUnavailable, gin.H{
@@ -159,6 +180,7 @@ func (c *Client) BuildHealthRoute(requiredServices []string, routes []helper.Rou
 
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": "ready",
+			"snapshot": snap,
 		})
 	})
 }

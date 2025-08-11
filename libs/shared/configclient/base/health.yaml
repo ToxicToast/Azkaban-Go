@@ -1,6 +1,11 @@
 health:
+  services:
+    - "blog"
+    - "foodfolio"
+    - "twitch"
+    - "warcraft"
   livenessPath: "/healthz"
-  readinessPath: "/readyz"
+  readinessPath: "/livez"
   checkIntervals:
     grpcTargets: 5s
     redis: 5s
