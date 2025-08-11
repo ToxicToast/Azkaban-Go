@@ -19,7 +19,7 @@ routes:
         offset: offset
         with_deleted: with_deleted
     auth:
-      groups: ["warcraft"]
+      groups: []
     cache:
       ttl_ms: 5000
 
@@ -39,7 +39,7 @@ routes:
       query_params:
         with_deleted: with_deleted
     auth:
-      groups: [ "warcraft" ]
+      groups: []
     cache:
       ttl_ms: 5000
 
@@ -59,7 +59,7 @@ routes:
       query_params:
         with_deleted: with_deleted
     auth:
-      groups: [ "warcraft" ]
+      groups: []
     cache:
       ttl_ms: 5000
 
@@ -78,6 +78,50 @@ routes:
         user_id: user_id
       query_params:
         with_deleted: with_deleted
+    auth:
+      groups: []
+    cache:
+      ttl_ms: 5000
+
+  - name: get_warcraft_characters_by_guild_id
+    http:
+      method: GET
+      path: /api/v1/warcraft/characters/guild/{guild_id}
+      query:
+        with_deleted: boolean
+    grpc:
+      service: warcraft
+      target: warcraft.character.WarcraftCharacterService.GetCharactersByGuild
+      timeout_ms: 2000
+    mapping:
+      path_params:
+        guild_id: guild_id
+      query_params:
+        with_deleted: with_deleted
+    auth:
+      groups: [ ]
+    cache:
+      ttl_ms: 5000
+
+  - name: create_warcraft_character
+    http:
+      method: POST
+      path: /api/v1/warcraft/characters
+      body:
+        region: string
+        realm: string
+        name: string
+    grpc:
+      service: warcraft
+      target: warcraft.character.WarcraftCharacterService.CreateCharacter
+      timeout_ms: 2000
+    mapping:
+      body:
+        region: region
+        realm: realm
+        name: name
+      path_params: []
+      query_params: []
     auth:
       groups: [ "warcraft" ]
     cache:

@@ -1,27 +1,10 @@
-package main
+package handler
 
 import (
 	"context"
-	"fmt"
-	"log"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
-
-	"github.com/ToxicToast/Azkaban-Go/apps/warcraft/internal/handler"
 	characterpb "github.com/ToxicToast/Azkaban-Go/proto/warcraft/character"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/health"
-	healthpb "google.golang.org/grpc/health/grpc_health_v1"
-	"google.golang.org/grpc/reflection"
-	"google.golang.org/grpc/status"
+	"github.com/ToxicToast/Azkaban-Go/proto/warcraft/character"
 )
-
-type svc struct {
-	characterpb.UnimplementedWarcraftCharacterServiceServer
-}
 
 func buildCharacters() []*characterpb.Character {
 	return []*characterpb.Character{
@@ -608,57 +591,10 @@ func buildCharacters() []*characterpb.Character {
 	}
 }
 
-func (s *svc) GetCharacters(ctx context.Context, in *characterpb.GetCharactersRequest) (*characterpb.GetCharactersResponse, error) {
-	return handler.GetCharactersHandler(ctx, in)
-}
-
-func (s *svc) GetCharactersById(ctx context.Context, in *characterpb.GetCharacterByIdRequest) (*characterpb.Character, error) {
+func GetCharactersHandler(ctx context.Context, in *character.GetCharactersRequest) (*character.GetCharactersResponse, error) {
 	characters := buildCharacters()
-	for _, character := range characters {
-		if character.Id == in.GetId() {
-			return character, nil
-		}
-	}
-	return nil, status.Errorf(codes.NotFound, "character not found")
-}
-
-func (s *svc) CreateCharacter(ctx context.Context, in *characterpb.CreateCharacterRequest) (*characterpb.Character, error) {
-	fmt.Sprintf("Creating character: %s in realm: %s, region: %s", in.GetName(), in.GetRealm(), in.GetRegion())
-	//
-	character := &characterpb.Character{
-		Id:     0,
-		Region: in.GetRegion(),
-		Realm:  in.GetRealm(),
-		Name:   in.GetName(),
-	}
-	return character, nil
-
-}
-
-func main() {
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
-	go func() {
-		lis, err := net.Listen("tcp", ":8082")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		server := grpc.NewServer()
-		characterpb.RegisterWarcraftCharacterServiceServer(server, &svc{})
-
-		hs := health.NewServer()
-		healthpb.RegisterHealthServer(server, hs)
-		hs.SetServingStatus("warcraft", healthpb.HealthCheckResponse_SERVING)
-
-		reflection.Register(server)
-
-		log.Println("Warcraft stub listening on :8082")
-		log.Fatal(server.Serve(lis))
-	}()
-
-	<-stop
-	fmt.Println("Shutting down warcraft service...")
-
+	return &character.GetCharactersResponse{
+		Data:  characters,
+		Total: int64(len(characters)),
+	}, nil
 }

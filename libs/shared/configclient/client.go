@@ -1,6 +1,7 @@
 package configclient
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -190,6 +191,7 @@ func (c *Client) Load() *Config {
 	}
 	// ENV-Overrides (SERVER_HTTP_PORT etc.)
 	if err := c.k.Load(env.Provider("", ".", func(s string) string {
+		fmt.Printf("Loading env var: %s\n", s)
 		return strings.ToLower(strings.ReplaceAll(s, "_", "."))
 	}), nil); err != nil {
 		log.Fatalf("error loading env vars: %v", err)
@@ -199,6 +201,7 @@ func (c *Client) Load() *Config {
 	if err := c.k.Unmarshal("", &cfg); err != nil {
 		log.Fatalf("error unmarshalling config: %v", err)
 	}
+
 	return &cfg
 }
 

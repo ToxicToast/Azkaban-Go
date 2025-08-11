@@ -220,6 +220,29 @@ func (c *Client) BuildRoutes(routes []helper.Routes, reg registryclient.Registry
 				}
 			}
 
+			if ctx.Request.Method == http.MethodPost || ctx.Request.Method == http.MethodPut || ctx.Request.Method == http.MethodPatch {
+				var body map[string]any
+				if err := ctx.ShouldBindJSON(&body); err != nil {
+					ctx.JSON(http.StatusBadRequest, gin.H{
+						"error": "invalid JSON body",
+					})
+					return
+				}
+				if len(rt.Mapping.Body) > 0 {
+					// Mapping aus der YAML anwenden
+					for from, to := range rt.Mapping.Body {
+						if v, ok := body[from]; ok {
+							setField(payload, to, v)
+						}
+					}
+				} else {
+					// Kein Mapping: ganzen Body übernehmen
+					for k, v := range body {
+						payload[k] = v
+					}
+				}
+			}
+
 			req := entry.NewReq()
 			marshaled, err := jsonMarshal(payload)
 

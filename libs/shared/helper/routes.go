@@ -6,6 +6,7 @@ type Routes struct {
 		Method string
 		Path   string
 		Query  map[string]string
+		Body   map[string]string
 	}
 	Grpc struct {
 		Service   string
@@ -15,7 +16,7 @@ type Routes struct {
 	Mapping struct {
 		PathParams  map[string]string `koanf:"path_params"`
 		QueryParams map[string]string `koanf:"query_params"`
-		Body        map[string]string
+		Body        map[string]string `koanf:"body"`
 	}
 	Auth struct {
 		Groups []string
