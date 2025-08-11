@@ -120,6 +120,162 @@ func setMode(envName string) {
 	}
 }
 
+type httpError struct {
+	Code    int
+	Message string
+}
+
+func newHTTPError(code int, msg string) *httpError {
+	return &httpError{Code: code, Message: msg}
+}
+
+func applyPathParams(ctx *gin.Context, payload map[string]any, pathMap map[string]string) *httpError {
+	for from, to := range pathMap {
+		val := ctx.Param(from)
+		if val == "" {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("missing path param: %s", from))
+		}
+		setField(payload, to, val)
+	}
+	return nil
+}
+
+func applyBody(ctx *gin.Context, payload map[string]any, bodyMap map[string]string) *httpError {
+	var body map[string]any
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		return newHTTPError(http.StatusBadRequest, "invalid JSON body")
+	}
+
+	if len(bodyMap) > 0 {
+		for from, to := range bodyMap {
+			if v, ok := body[from]; ok {
+				setField(payload, to, v)
+			}
+		}
+		return nil
+	}
+
+	// kein Mapping definiert -> ganzen Body übernehmen
+	for k, v := range body {
+		payload[k] = v
+	}
+	return nil
+}
+
+func applyQueryParams(ctx *gin.Context, payload map[string]any, rt helper.Routes) *httpError {
+	for from, to := range rt.Mapping.QueryParams {
+		if raw, ok := getQueryMaybe(ctx, from); ok {
+			qt := rt.Http.Query[from] // "number" | "boolean" | "string"
+			var val any = raw
+			switch qt {
+			case "number":
+				n, err := strconv.ParseInt(raw, 10, 64)
+				if err != nil {
+					return newHTTPError(http.StatusBadRequest, fmt.Sprintf("query %s must be number", from))
+				}
+				val = n
+			case "boolean":
+				b, err := strconv.ParseBool(raw)
+				if err != nil {
+					return newHTTPError(http.StatusBadRequest, fmt.Sprintf("query %s must be boolean", from))
+				}
+				val = b
+				// "string" oder leer -> raw beibehalten
+			}
+			setField(payload, to, val)
+		}
+	}
+	return nil
+}
+
+func (c *Client) buildPayload(ctx *gin.Context, rt helper.Routes) (map[string]any, *httpError) {
+	payload := make(map[string]any)
+
+	if err := applyPathParams(ctx, payload, rt.Mapping.PathParams); err != nil {
+		return nil, err
+	}
+
+	if err := applyQueryParams(ctx, payload, rt); err != nil {
+		return nil, err
+	}
+
+	if ctx.Request.Method == http.MethodPost || ctx.Request.Method == http.MethodPut || ctx.Request.Method == http.MethodPatch {
+		if err := applyBody(ctx, payload, rt.Mapping.Body); err != nil {
+			return nil, err
+		}
+	}
+
+	return payload, nil
+}
+
+func (c *Client) registerRoute(method, path string, handler gin.HandlerFunc) {
+	switch method {
+	case http.MethodGet:
+		c.router.GET(path, handler)
+	case http.MethodPost:
+		c.router.POST(path, handler)
+	case http.MethodPut:
+		c.router.PUT(path, handler)
+	case http.MethodPatch:
+		c.router.PATCH(path, handler)
+	case http.MethodDelete:
+		c.router.DELETE(path, handler)
+	default:
+		panic("unsupported method: " + method)
+	}
+}
+
+func (c *Client) validateTargets(routes []helper.Routes, reg registryclient.Registry) {
+	for _, rt := range routes {
+		key := normalizeTarget(rt.Grpc.Target)
+		if _, ok := reg.Get(key); !ok {
+			log.Fatalf("route %q refers to unknown grpc target %q", rt.Name, key)
+		}
+	}
+}
+
+func (c *Client) handleRequest(ctx *gin.Context, rt helper.Routes, reg registryclient.Registry) *httpError {
+	entry, ok := reg.Get(normalizeTarget(rt.Grpc.Target))
+	if !ok {
+		return newHTTPError(http.StatusNotImplemented, "unmapped grpc target")
+	}
+	payload, errBP := c.buildPayload(ctx, rt)
+	if errBP != nil {
+		return errBP
+	}
+	req := entry.NewReq()
+	marshaled, errJSON := jsonMarshal(payload)
+	if errJSON != nil {
+		return newHTTPError(http.StatusBadRequest, errJSON.Error())
+	}
+	if err := protojson.Unmarshal(marshaled, req); err != nil {
+		return newHTTPError(http.StatusBadRequest, "invalid request: "+err.Error())
+	}
+	cc, err := c.pool.Get(ctx.Request.Context(), rt.Grpc.Service)
+	if err != nil {
+		return newHTTPError(http.StatusBadGateway, "downstream dial failed: "+err.Error())
+	}
+	to := time.Duration(rt.Grpc.Timeoutms) * time.Millisecond
+	if to <= 0 {
+		to = 5 * time.Second
+	}
+	cctx, cancel := context.WithTimeout(ctx.Request.Context(), to)
+	defer cancel()
+	resp, err := entry.Invoke(cctx, cc, req)
+	if err != nil {
+		httpCode, msg := mapGrpcError(err)
+		return newHTTPError(httpCode, msg)
+	}
+
+	b, err := protojson.MarshalOptions{UseProtoNames: true}.Marshal(resp)
+	if err != nil {
+		return newHTTPError(http.StatusInternalServerError, "marshal response failed")
+	}
+
+	ctx.Data(http.StatusOK, "application/json", b)
+	return nil
+}
+
 func NewClient(envName, port string, pool *grpcclient.Client) *Client {
 	setMode(envName)
 	return &Client{
@@ -171,152 +327,19 @@ func (c *Client) BuildHealthRoute(
 func (c *Client) BuildRoutes(routes []helper.Routes, reg registryclient.Registry) {
 	for _, route := range routes {
 		rt := route
-		method := rt.Http.Method
 		path := yamlToGinPath(rt.Http.Path)
 
 		handler := func(ctx *gin.Context) {
-			normalizedTarget := normalizeTarget(rt.Grpc.Target)
-			entry, ok := reg.Get(normalizedTarget)
-			if !ok {
-				ctx.JSON(http.StatusNotImplemented, gin.H{
-					"error": "unmapped grpc target",
-				})
+			if err := c.handleRequest(ctx, rt, reg); err != nil {
+				ctx.JSON(err.Code, gin.H{"error": err.Message})
 				return
 			}
-			payload := make(map[string]any)
-
-			for from, to := range rt.Mapping.PathParams {
-				val := ctx.Param(from)
-				if val == "" {
-					ctx.JSON(http.StatusBadRequest, gin.H{
-						"error": fmt.Sprintf("missing path param: %s", from),
-					})
-					return
-				}
-				setField(payload, to, coercePathParam(val))
-			}
-
-			for from, to := range rt.Mapping.QueryParams {
-				if raw, ok := getQueryMaybe(ctx, from); ok {
-					qt := rt.Http.Query[from] // "number" | "boolean" | "string"
-					var val any = raw
-					switch qt {
-					case "number":
-						n, err := strconv.ParseInt(raw, 10, 64)
-						if err != nil {
-							ctx.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("query %s must be number", from)})
-							return
-						}
-						val = n
-					case "boolean":
-						b, err := strconv.ParseBool(raw)
-						if err != nil {
-							ctx.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("query %s must be boolean", from)})
-							return
-						}
-						val = b
-					}
-					setField(payload, to, val)
-				}
-			}
-
-			if ctx.Request.Method == http.MethodPost || ctx.Request.Method == http.MethodPut || ctx.Request.Method == http.MethodPatch {
-				var body map[string]any
-				if err := ctx.ShouldBindJSON(&body); err != nil {
-					ctx.JSON(http.StatusBadRequest, gin.H{
-						"error": "invalid JSON body",
-					})
-					return
-				}
-				if len(rt.Mapping.Body) > 0 {
-					// Mapping aus der YAML anwenden
-					for from, to := range rt.Mapping.Body {
-						if v, ok := body[from]; ok {
-							setField(payload, to, v)
-						}
-					}
-				} else {
-					// Kein Mapping: ganzen Body übernehmen
-					for k, v := range body {
-						payload[k] = v
-					}
-				}
-			}
-
-			req := entry.NewReq()
-			marshaled, err := jsonMarshal(payload)
-
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{
-					"error": err.Error(),
-				})
-				return
-			}
-			if err := protojson.Unmarshal(marshaled, req); err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{
-					"error": "invalid request: " + err.Error(),
-				})
-				return
-			}
-
-			to := time.Duration(rt.Grpc.Timeoutms) * time.Millisecond
-			if to <= 0 {
-				to = 5 * time.Second
-			}
-			cctx, cancel := context.WithTimeout(ctx.Request.Context(), to)
-			defer cancel()
-
-			cc, err := c.pool.Get(ctx.Request.Context(), rt.Grpc.Service)
-			if err != nil {
-				ctx.JSON(http.StatusBadGateway, gin.H{
-					"error": "downstream dial failed: " + err.Error(),
-				})
-				return
-			}
-
-			resp, err := entry.Invoke(cctx, cc, req)
-			if err != nil {
-				httpCode, msg := mapGrpcError(err)
-				ctx.JSON(httpCode, gin.H{
-					"error": msg,
-				})
-				return
-			}
-
-			b, err := protojson.MarshalOptions{
-				UseProtoNames: true,
-			}.Marshal(resp)
-			if err != nil {
-				ctx.JSON(http.StatusInternalServerError, gin.H{
-					"error": "marshal response failed",
-				})
-				return
-			}
-			ctx.Data(http.StatusOK, "application/json", b)
 		}
 
-		switch method {
-		case http.MethodGet:
-			c.router.GET(path, handler)
-		case http.MethodPost:
-			c.router.POST(path, handler)
-		case http.MethodPut:
-			c.router.PUT(path, handler)
-		case http.MethodPatch:
-			c.router.PATCH(path, handler)
-		case http.MethodDelete:
-			c.router.DELETE(path, handler)
-		default:
-			panic("unsupported method: " + method)
-		}
+		c.registerRoute(rt.Http.Method, path, handler)
 	}
 
-	for _, rt := range routes {
-		key := normalizeTarget(rt.Grpc.Target)
-		if _, ok := reg.Get(key); !ok {
-			log.Fatalf("route %q refers to unknown grpc target %q", rt.Name, key)
-		}
-	}
+	c.validateTargets(routes, reg)
 }
 
 func (c *Client) RunServer() error {
