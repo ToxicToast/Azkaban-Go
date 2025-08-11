@@ -9,7 +9,7 @@ import (
 	"os/exec"
 )
 
-func dockerBlog() error {
+func pusherBlog() error {
 	fmt.Println("🔍 Dockerize Blog Service...")
 	cmd := exec.Command("docker", "push", "-t", "toxictoast/blog-go:dev")
 	fmt.Printf("→ %s\n", cmd)
@@ -18,7 +18,7 @@ func dockerBlog() error {
 	return cmd.Run()
 }
 
-func dockerCronjob() error {
+func pusherCronjob() error {
 	fmt.Println("🔍 Dockerize Cronjob Service...")
 	cmd := exec.Command("docker", "push", "-t", "toxictoast/cronjob-go:dev")
 	fmt.Printf("→ %s\n", cmd)
@@ -27,7 +27,7 @@ func dockerCronjob() error {
 	return cmd.Run()
 }
 
-func dockerFoodfolio() error {
+func pusherFoodfolio() error {
 	fmt.Println("🔍 Dockerize Foodfolio Service...")
 	cmd := exec.Command("docker", "push", "-t", "toxictoast/foodfolio-go:dev")
 	fmt.Printf("→ %s\n", cmd)
@@ -36,7 +36,7 @@ func dockerFoodfolio() error {
 	return cmd.Run()
 }
 
-func dockerGateway() error {
+func pusherGateway() error {
 	fmt.Println("🔍 Dockerize Gateway Service...")
 	cmd := exec.Command("docker", "push", "-t", "toxictoast/gateway-go:dev")
 	fmt.Printf("→ %s\n", cmd)
@@ -45,7 +45,7 @@ func dockerGateway() error {
 	return cmd.Run()
 }
 
-func dockerTwitch() error {
+func pusherTwitch() error {
 	fmt.Println("🔍 Dockerize Twitch Service...")
 	cmd := exec.Command("docker", "push", "-t", "toxictoast/twitch-go:dev")
 	fmt.Printf("→ %s\n", cmd)
@@ -54,7 +54,7 @@ func dockerTwitch() error {
 	return cmd.Run()
 }
 
-func dockerWarcraft() error {
+func pusherWarcraft() error {
 	fmt.Println("🔍 Dockerize Warcraft Service...")
 	cmd := exec.Command("docker", "push", "-t", "toxictoast/warcraft-go:dev")
 	fmt.Printf("→ %s\n", cmd)
@@ -63,36 +63,36 @@ func dockerWarcraft() error {
 	return cmd.Run()
 }
 
-func Docker() error {
+func Push() error {
 	fmt.Println("🔍 Dockerize Services...")
-	var errBlog = dockerBlog()
-	if errBlog != nil {
-		return fmt.Errorf("failed to dockerize blog: %w", errBlog)
+	var errPushBlog = pusherBlog()
+	if errPushBlog != nil {
+		return fmt.Errorf("failed to dockerize blog: %w", errPushBlog)
 	}
 
-	var errCronjob = dockerCronjob()
-	if errCronjob != nil {
-		return fmt.Errorf("failed to dockerize cronjob: %w", errCronjob)
+	var errPushCronjob = pusherCronjob()
+	if errPushCronjob != nil {
+		return fmt.Errorf("failed to dockerize cronjob: %w", errPushCronjob)
 	}
 
-	var errFoodfolio = dockerFoodfolio()
-	if errFoodfolio != nil {
-		return fmt.Errorf("failed to dockerize foodfolio: %w", errFoodfolio)
+	var errPushFoodfolio = pusherFoodfolio()
+	if errPushFoodfolio != nil {
+		return fmt.Errorf("failed to dockerize foodfolio: %w", errPushFoodfolio)
 	}
 
-	var errGateway = dockerGateway()
-	if errGateway != nil {
-		return fmt.Errorf("failed to dockerize gateway: %w", errGateway)
+	var errPushGateway = pusherGateway()
+	if errPushGateway != nil {
+		return fmt.Errorf("failed to dockerize gateway: %w", errPushGateway)
 	}
 
-	var errTwitch = dockerTwitch()
-	if errTwitch != nil {
-		return fmt.Errorf("failed to dockerize twitch: %w", errTwitch)
+	var errPushTwitch = pusherTwitch()
+	if errPushTwitch != nil {
+		return fmt.Errorf("failed to dockerize twitch: %w", errPushTwitch)
 	}
 
-	var errWarcraft = dockerWarcraft()
-	if errWarcraft != nil {
-		return fmt.Errorf("failed to dockerize warcraft: %w", errWarcraft)
+	var errPushWarcraft = pusherWarcraft()
+	if errPushWarcraft != nil {
+		return fmt.Errorf("failed to dockerize warcraft: %w", errPushWarcraft)
 	}
 
 	return nil
