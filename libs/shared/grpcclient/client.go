@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/ToxicToast/Azkaban-Go/libs/shared/helper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type Client struct {
@@ -50,7 +52,7 @@ func (c *Client) Get(ctx context.Context, service string) (*grpc.ClientConn, err
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	}
 	// TODO: TLS creds bauen (CA, ServerName, mTLS etc.)
-	
+
 	cc, err := grpc.NewClient(target, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("dial %s: %w", target, err)
@@ -66,49 +68,13 @@ func (c *Client) Get(ctx context.Context, service string) (*grpc.ClientConn, err
 	return cc, nil
 }
 
-/*func (c *Client) Get(service string) (*grpc.ClientConn, error) {
-	c.mu.Lock()
-	if cc, ok := c.conns[service]; ok {
-		c.mu.Unlock()
-		log.Printf("downstream cache hit service=%s conn=%p state=%s", service, cc, cc.GetState().String())
-		return cc, nil
-	}
-
-	log.Printf("dialing service=%s; connection=%p", service, c.conns[service])
-
-	sc, ok := c.cfg[service]
-	if !ok || len(sc.Endpoints) == 0 {
-		c.mu.Unlock()
-		return nil, fmt.Errorf("unknown service %q or no endpoints (%s)", service, len(sc.Endpoints))
-	}
-
-	target := sc.Endpoints[0]
-
-	log.Printf("dialing downstream %q for service=%s", target, service)
-
-	opts := []grpc.DialOption{
-		grpc.WithBlock(),
-	}
-	if sc.Insecure {
-		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	} else {
-		// ca_file, server_name etc.
-	}
-
-	to := time.Duration(sc.DialTimeoutms) * time.Millisecond
-	if to <= 0 {
-		to = 3 * time.Second
-	}
-	cc, err := grpc.NewClient(target, opts...)
+func (c *Client) Ping(ctx context.Context, service string) error {
+	cc, err := c.Get(ctx, service)
 	if err != nil {
-		return nil, fmt.Errorf("dial %s: %w", target, err)
+		return err
 	}
-
-	log.Printf("downstream connected service=%s target=%s conn=%p state=%s",
-		service, target, cc, cc.GetState().String())
-
-	c.mu.Lock()
-	c.conns[service] = cc
-	c.mu.Unlock()
-	return cc, nil
-}*/
+	ctx, cancel := context.WithTimeout(ctx, time.Second)
+	defer cancel()
+	_, err = healthpb.NewHealthClient(cc).Check(ctx, &healthpb.HealthCheckRequest{Service: service})
+	return err
+}

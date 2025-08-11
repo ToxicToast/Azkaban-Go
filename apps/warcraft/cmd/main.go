@@ -2,12 +2,18 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	characterpb "github.com/ToxicToast/Azkaban-Go/proto/warcraft/character"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/health"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 )
@@ -620,15 +626,29 @@ func (s *svc) GetCharactersById(ctx context.Context, in *characterpb.GetCharacte
 }
 
 func main() {
-	lis, err := net.Listen("tcp", ":8082")
-	if err != nil {
-		log.Fatal(err)
-	}
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	server := grpc.NewServer()
-	characterpb.RegisterWarcraftCharacterServiceServer(server, &svc{})
-	reflection.Register(server)
+	go func() {
+		lis, err := net.Listen("tcp", ":8082")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	log.Println("Warcraft stub listening on :8082")
-	log.Fatal(server.Serve(lis))
+		server := grpc.NewServer()
+		characterpb.RegisterWarcraftCharacterServiceServer(server, &svc{})
+
+		hs := health.NewServer()
+		healthpb.RegisterHealthServer(server, hs)
+		hs.SetServingStatus("warcraft", healthpb.HealthCheckResponse_SERVING)
+
+		reflection.Register(server)
+
+		log.Println("Warcraft stub listening on :8082")
+		log.Fatal(server.Serve(lis))
+	}()
+
+	<-stop
+	fmt.Println("Shutting down warcraft service...")
+
 }

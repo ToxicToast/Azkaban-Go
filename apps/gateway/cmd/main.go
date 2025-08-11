@@ -55,6 +55,7 @@ func loadGrpcClients() {
 func loadRouter() {
 	router = routerclient.NewClient(cfg.App.Env, ":"+cfg.Server.Http.Port, grpcClient)
 	router.BuildRoutes(cfg.Routes, registry)
+	router.BuildHealthRoute([]string{"warcraft"}, cfg.Routes, registry)
 }
 
 func init() {
