@@ -98,17 +98,6 @@ func mapGrpcError(err error) (int, string) {
 	}
 }
 
-func coercePathParam(s string) any {
-	// erst int, dann bool, zuletzt string
-	if n, err := strconv.ParseInt(s, 10, 64); err == nil {
-		return n
-	}
-	if b, err := strconv.ParseBool(s); err == nil {
-		return b
-	}
-	return s
-}
-
 func setMode(envName string) {
 	switch envName {
 	case "prod", "staging":
