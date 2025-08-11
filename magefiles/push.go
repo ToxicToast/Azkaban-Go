@@ -11,7 +11,7 @@ import (
 
 func pusherBlog() error {
 	fmt.Println("🔍 Dockerize Blog Service...")
-	cmd := exec.Command("docker", "push", "-t", "toxictoast/blog-go:dev")
+	cmd := exec.Command("docker", "push", "toxictoast/blog-go:dev")
 	fmt.Printf("→ %s\n", cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -20,7 +20,7 @@ func pusherBlog() error {
 
 func pusherCronjob() error {
 	fmt.Println("🔍 Dockerize Cronjob Service...")
-	cmd := exec.Command("docker", "push", "-t", "toxictoast/cronjob-go:dev")
+	cmd := exec.Command("docker", "push", "toxictoast/cronjob-go:dev")
 	fmt.Printf("→ %s\n", cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -29,7 +29,7 @@ func pusherCronjob() error {
 
 func pusherFoodfolio() error {
 	fmt.Println("🔍 Dockerize Foodfolio Service...")
-	cmd := exec.Command("docker", "push", "-t", "toxictoast/foodfolio-go:dev")
+	cmd := exec.Command("docker", "push", "toxictoast/foodfolio-go:dev")
 	fmt.Printf("→ %s\n", cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -38,7 +38,7 @@ func pusherFoodfolio() error {
 
 func pusherGateway() error {
 	fmt.Println("🔍 Dockerize Gateway Service...")
-	cmd := exec.Command("docker", "push", "-t", "toxictoast/gateway-go:dev")
+	cmd := exec.Command("docker", "push", "toxictoast/gateway-go:dev")
 	fmt.Printf("→ %s\n", cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -47,7 +47,7 @@ func pusherGateway() error {
 
 func pusherTwitch() error {
 	fmt.Println("🔍 Dockerize Twitch Service...")
-	cmd := exec.Command("docker", "push", "-t", "toxictoast/twitch-go:dev")
+	cmd := exec.Command("docker", "push", "toxictoast/twitch-go:dev")
 	fmt.Printf("→ %s\n", cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -56,7 +56,7 @@ func pusherTwitch() error {
 
 func pusherWarcraft() error {
 	fmt.Println("🔍 Dockerize Warcraft Service...")
-	cmd := exec.Command("docker", "push", "-t", "toxictoast/warcraft-go:dev")
+	cmd := exec.Command("docker", "push", "toxictoast/warcraft-go:dev")
 	fmt.Printf("→ %s\n", cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
