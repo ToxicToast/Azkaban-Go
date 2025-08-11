@@ -1,0 +1,7 @@
+health:
+  services:
+    - "blog"
+    - "foodfolio"
+    - "twitch"
+    - "warcraft"
+    - "shortener"

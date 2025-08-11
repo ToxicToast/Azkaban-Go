@@ -1,9 +1,5 @@
 health:
-  services:
-    - "blog"
-    - "foodfolio"
-    - "twitch"
-    - "warcraft"
+  services: []
   livenessPath: "/healthz"
   readinessPath: "/livez"
   checkIntervals:
