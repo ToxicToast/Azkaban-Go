@@ -165,23 +165,6 @@ func (c *Client) BuildHealthRoute(
 			"status":   "ready",
 			"snapshot": snap,
 		})
-
-		for _, svc := range requiredServices {
-			if err := c.pool.Ping(ctx.Request.Context(), svc); err != nil {
-				ctx.JSON(http.StatusServiceUnavailable, gin.H{
-					"status": "not_ready",
-					"reason": "grpc_ping_failed",
-					"target": svc,
-					"error":  err.Error(),
-				})
-				return
-			}
-		}
-
-		ctx.JSON(http.StatusOK, gin.H{
-			"status": "ready",
-			"snapshot": snap,
-		})
 	})
 }
 
