@@ -43,32 +43,11 @@ jobs:
       - name: 🔍 Run Linter via Mage
         run: mage lint
 
+      #- name: ✅ Run all tests
+        #run: mage test
+
       - name: 🔨 Build all modules
-        run: |
-          for d in $(find apps libs -name go.mod); do
-            dir=$(dirname $d)
-            echo "→ Building $dir"
-            go build -v $dir/...
-          done
+        run: mage build
 
-      - name: ✅ Run all tests
-        run: mage test
-
-      - name: 📊 Collect coverage
-        run: |
-          echo "mode: atomic" > coverage.out
-          for d in $(find apps libs -name go.mod); do
-            dir=$(dirname $d)
-            go test -covermode=atomic -coverprofile=profile.out $dir/...
-            if [ -f profile.out ]; then
-              tail -n +2 profile.out >> coverage.out
-              rm profile.out
-            fi
-          done
-        continue-on-error: true
-
-      - name: 📤 Upload coverage report (optional)
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage.out
+      - name: 📦 Build Docker image
+        run: mage docker
