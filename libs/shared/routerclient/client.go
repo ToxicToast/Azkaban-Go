@@ -279,13 +279,12 @@ func (c *Client) BuildHealthRoute(
 	requiredServices []string,
 	routes []helper.Routes,
 	reg registryclient.Registry,
-	livenessPath, readinessPath string,
 ) {
-	c.router.GET(readinessPath, func(ctx *gin.Context) {
+	c.router.GET("/livez", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "ok")
 	})
 
-	c.router.GET(livenessPath, func(ctx *gin.Context) {
+	c.router.GET("/healthz", func(ctx *gin.Context) {
 		for _, rt := range routes {
 			key := normalizeTarget(rt.Grpc.Target)
 			if _, ok := reg.Get(key); !ok {

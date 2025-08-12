@@ -1,7 +1,5 @@
 health:
   services: []
-  livenessPath: "/healthz"
-  readinessPath: "/livez"
   checkIntervals:
     grpcTargets: 5s
     redis: 5s

@@ -87,8 +87,6 @@ type Config struct {
 	}
 	Health struct {
 		Services       []string
-		LivenessPath   string
-		ReadinessPath  string
 		CheckIntervals struct {
 			GrpcTargets time.Duration
 			Redis       time.Duration

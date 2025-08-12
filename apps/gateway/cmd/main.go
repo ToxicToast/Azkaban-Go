@@ -59,7 +59,7 @@ func loadGrpcClients() {
 func loadRouter() {
 	router = routerclient.NewClient(cfg.App.Env, ":"+cfg.Server.Http.Port, grpcClient)
 	router.BuildRoutes(cfg.Routes, registry)
-	router.BuildHealthRoute(monitor, cfg.Health.Services, cfg.Routes, registry, cfg.Health.LivenessPath, cfg.Health.ReadinessPath)
+	router.BuildHealthRoute(monitor, cfg.Health.Services, cfg.Routes, registry)
 }
 
 func loadMonitor() {
