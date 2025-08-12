@@ -33,3 +33,4 @@ apps/gateway/.env
 # Local configuration files
 apps/gateway/.env
 apps/gateway/.env
+bin/
